@@ -11,14 +11,14 @@ pipeline {
                     sh './gradlew checkstyleMain'
                 }
             }
+         stage('Test') {
+                     steps {
+                         sh './gradlew test'
+                     }
+                 }
         stage('Build') {
             steps {
                 sh './gradlew clean build'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh './gradlew test'
             }
         }
     }
