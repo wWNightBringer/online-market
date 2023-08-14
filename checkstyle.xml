@@ -16,4 +16,5 @@
        // CHECKSTYLE:ON
     -->
     <module name="SuppressWithPlainTextCommentFilter"/>
+    <module name="UnusedImports"/>
 </module>
