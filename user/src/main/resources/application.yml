@@ -28,11 +28,11 @@ management:
       roles: 'ROLE_ADMIN'
       probes:
         enabled: true
-#      group:
-#        liveness:
-#          include: livenessState
-#        readiness:
-#          include: readinessState,db
+  #      group:
+  #        liveness:
+  #          include: livenessState
+  #        readiness:
+  #          include: readinessState,db
   info:
     git:
       mode: full

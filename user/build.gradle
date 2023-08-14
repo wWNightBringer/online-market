@@ -2,18 +2,36 @@ plugins {
     id 'java'
 }
 
-group 'com.app.market'
-version '0.0.1-SNAPSHOT'
+group = 'com.app.market'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
+ext {
+    set('springCloudVersion', "2022.0.4")
+}
+
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation 'org.springframework.boot:spring-boot-starter-web:3.1.1'
     implementation "org.springframework.boot:spring-boot-starter-actuator:3.1.1"
-    implementation "org.springframework.boot:spring-boot-loader-tools:3.1.1"
-    implementation "org.springframework.cloud:spring-cloud-starter-consul-discovery:4.0.3"
+    implementation 'org.springframework.cloud:spring-cloud-starter-consul-discovery:4.0.3'
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.1'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }
