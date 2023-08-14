@@ -15,4 +15,3 @@ pluginManagement {
 
 rootProject.name = "online-market"
 include 'user'
-
