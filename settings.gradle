@@ -14,5 +14,5 @@ pluginManagement {
 }
 
 rootProject.name = "online-market"
-include 'customer'
+include 'user'
 
