@@ -1,4 +1,4 @@
-package com.app.market.config;
+package com.app.market.security;
 
 import static com.app.market.security.SecurityUtils.AUTHORITIES_KEY;
 import static com.app.market.security.SecurityUtils.JWT_ALGORITHM;
@@ -6,8 +6,6 @@ import static com.app.market.security.SecurityUtils.JWT_ALGORITHM;
 import com.app.market.management.SecurityMetersService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +15,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 public class SecurityJwtConfiguration {

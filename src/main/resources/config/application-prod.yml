@@ -1,22 +1,7 @@
-# ===================================================================
-# Spring Boot configuration for the "prod" profile.
-#
-# This configuration overrides the application.yml file.
-#
-# More information on profiles: https://www.jhipster.tech/profiles/
-# More information on configuration properties: https://www.jhipster.tech/common-application-properties/
-# ===================================================================
-
-# ===================================================================
-# Standard Spring Boot properties.
-# Full reference is available at:
-# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
-# ===================================================================
 
 logging:
   level:
     ROOT: INFO
-    tech.jhipster: INFO
     com.app.market: INFO
 
 management:
@@ -45,12 +30,13 @@ spring:
       port: 8500
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/OnlineMarket
-    username: OnlineMarket
+    url: jdbc:postgresql://localhost:5432/onlinemarket
+    username: postgres
     password:
     hikari:
       poolName: Hikari
       auto-commit: false
+    driver-class-name: org.postgresql.Driver
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
@@ -84,12 +70,6 @@ server:
     mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
     min-response-size: 1024
 
-# ===================================================================
-# JHipster specific properties
-#
-# Full reference is available at: https://www.jhipster.tech/common-application-properties/
-# ===================================================================
-
 jhipster:
   http:
     cache: # Used by the CachingHttpHeadersFilter
@@ -117,13 +97,5 @@ jhipster:
       host: localhost
       port: 5000
       ring-buffer-size: 512
-# ===================================================================
-# Application specific properties
-# Add your own application properties here, see the ApplicationProperties class
-# to have type-safe configuration, like in the JHipsterProperties above
-#
-# More documentation is available at:
-# https://www.jhipster.tech/common-application-properties/
-# ===================================================================
 
 # application:

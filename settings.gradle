@@ -1,8 +1,6 @@
 
 pluginManagement {
-    repositories {
-        // jhipster-needle-gradle-plugin-management-repositories - JHipster will add additional entries here
-    }
+
     plugins {
         id 'org.springframework.boot' version "${springBootVersion}"
         id 'com.google.cloud.tools.jib' version "${jibPluginVersion}"
@@ -12,7 +10,6 @@ pluginManagement {
         id "io.spring.nohttp" version "${noHttpCheckstyleVersion}"
         id 'com.github.andygoossens.gradle-modernizer-plugin' version "${modernizerPluginVersion}"
         id "org.liquibase.gradle" version "${liquibasePluginVersion}"
-        // jhipster-needle-gradle-plugin-management-plugins - JHipster will add additional entries here
     }
 }
 
