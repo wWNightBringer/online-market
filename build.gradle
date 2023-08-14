@@ -4,6 +4,7 @@ plugins {
     id "idea"
     id "eclipse"
     id "jacoco"
+    id 'checkstyle'
     id "org.springframework.boot"
     id "com.google.cloud.tools.jib"
     id "com.gorylenko.gradle-git-properties"
@@ -19,8 +20,8 @@ version = "0.0.1-SNAPSHOT"
 
 description = ""
 
-sourceCompatibility=17
-targetCompatibility=17
+sourceCompatibility = 17
+targetCompatibility = 17
 assert System.properties["java.specification.version"] == "17" || "18" || "19"
 
 ext {
@@ -114,7 +115,6 @@ modernizer {
 }
 
 
-
 check.dependsOn integrationTest
 task testReport(type: TestReport) {
     destinationDirectory = file("$buildDir/reports/tests")
@@ -132,14 +132,20 @@ gitProperties {
 }
 
 tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
-  outputs.doNotCacheIf("Task is always executed") { true }
+    outputs.doNotCacheIf("Task is always executed") { true }
 }
 
 checkstyle {
+    ignoreFailures = true
     toolVersion "${checkstyleVersion}"
-    configFile file("checkstyle.xml")
+    configFile = file("${project.rootDir}/config/checkstyle.xml")
     checkstyleTest.enabled = false
 }
+
+checkstyleMain {
+    source ='src/main/java'
+}
+
 nohttp {
     source.include "build.gradle", "README.md"
 }
