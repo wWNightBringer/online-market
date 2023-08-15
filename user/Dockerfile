@@ -25,4 +25,4 @@ RUN gradle clean build
 COPY build/libs/user-0.0.1-SNAPSHOT.jar /app/user.jar
 
 # Start the application
-CMD ["java", "-jar", "user.jar"]
+ENTRYPOINT ["java", "-Xmx256m", "-Xss256k", "-XX:MetaspaceSize=100m", "-jar", "user.jar"]

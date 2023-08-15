@@ -28,4 +28,4 @@ RUN gradle clean build -x test -x integrationTest
 COPY build/libs/online-market-0.0.1-SNAPSHOT.jar /app/online-market.jar
 
 # Start the application
-CMD ["java", "-jar", "online-market.jar"]
+ENTRYPOINT ["java", "-Xmx256m", "-Xss256k", "-XX:MetaspaceSize=100m", "-jar", "online-market.jar"]

@@ -35,6 +35,7 @@ ext {
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
+apply from: "gradle/zipkin.gradle"
 
 apply from: "gradle/cache.gradle"
 apply from: "gradle/liquibase.gradle"
