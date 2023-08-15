@@ -2,13 +2,13 @@
 pluginManagement {
 
     plugins {
-        id 'org.springframework.boot' version "${springBootVersion}"
-        id 'com.google.cloud.tools.jib' version "${jibPluginVersion}"
-        id 'com.gorylenko.gradle-git-properties' version "${gitPropertiesPluginVersion}"
-        id 'org.sonarqube' version "${sonarqubePluginVersion}"
-        id "io.spring.nohttp" version "${noHttpCheckstyleVersion}"
-        id 'com.github.andygoossens.gradle-modernizer-plugin' version "${modernizerPluginVersion}"
-        id "org.liquibase.gradle" version "${liquibasePluginVersion}"
+        id 'org.springframework.boot' version "3.1.1"
+        id 'com.google.cloud.tools.jib' version "3.3.2"
+        id 'com.gorylenko.gradle-git-properties' version "2.4.1"
+        id 'org.sonarqube' version "4.2.1.3168"
+        id "io.spring.nohttp" version "0.0.11"
+        id 'com.github.andygoossens.gradle-modernizer-plugin' version "1.8.0"
+        id "org.liquibase.gradle" version "2.2.0"
     }
 }
 

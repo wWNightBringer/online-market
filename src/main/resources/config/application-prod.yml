@@ -11,7 +11,7 @@ management:
         enabled: false
   zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
     tracing:
-      endpoint: http://localhost:9411/api/v2/spans
+      endpoint: ${ZIPKIN_ENDPOINT:http://localhost:9411/api/v2/spans}
   tracing:
     sampling:
       probability: 1.0 # report 100% of traces
@@ -26,13 +26,13 @@ spring:
     consul:
       discovery:
         prefer-ip-address: true
-      host: localhost
+      host: ${CONSUL_HOST:localhost}
       port: 8500
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/onlinemarket
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/onlinemarket}
     username: postgres
-    password:
+    password: root
     hikari:
       poolName: Hikari
       auto-commit: false

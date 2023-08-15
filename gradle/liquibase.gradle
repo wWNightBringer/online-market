@@ -8,7 +8,7 @@ dependencies {
   // Dependency required to parse options. Refer to https://github.com/liquibase/liquibase-gradle-plugin/tree/Release_2.2.0#news.
   liquibaseRuntime "info.picocli:picocli:4.7.4"
 
-  liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:${liquibaseHibernate6Version}"
+  liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:4.20.0"
   if (project.hasProperty("prod") || project.hasProperty("gae")) {
   liquibaseRuntime "org.postgresql:postgresql"
   }
@@ -42,9 +42,6 @@ liquibase {
 
   runList = project.ext.runList
 }
-
-liquibaseDiff.dependsOn compileJava
-liquibaseDiffChangelog.dependsOn compileJava
 
 configurations {
   all {

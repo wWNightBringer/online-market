@@ -1,0 +1,65 @@
+version: '3'
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: onlinemarket
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    restart: on-failure
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5444:5432
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  consul:
+    image: docker.io/bitnami/consul:1.16.0
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 8300:8300
+      - 8500:8500
+      - 8600:8600
+    environment:
+      - INIT_SLEEP_SECONDS=5
+      - CONSUL_URL=consul
+      - CONSUL_PORT=8500
+    volumes:
+      - ./central-server-config:/config
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+  user:
+    container_name: user
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    environment:
+      CONSUL_HOST: consul
+    ports:
+      - 9001:9001
+    restart: on-failure
+    depends_on:
+      - consul
+      - postgresql
+  online-market:
+    container_name: online-market-config
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      CONSUL_HOST: consul
+      DATASOURCE_URL: jdbc:postgresql://postgresql:5432/onlinemarket
+    ports:
+      - 8081:8081
+    restart: on-failure
+    depends_on:
+      - consul
+      - postgresql
+
+volumes:
+  postgres_data:

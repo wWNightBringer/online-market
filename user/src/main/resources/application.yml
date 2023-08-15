@@ -3,6 +3,9 @@ server:
 spring:
   application:
     name: user-service
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
 
 management:
   endpoints:
