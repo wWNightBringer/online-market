@@ -21,8 +21,5 @@ COPY src /app/src
 # Build the application using Gradle
 RUN gradle clean build
 
-# Copy the generated JAR file based on the version
-COPY build/libs/user-0.0.1-SNAPSHOT.jar /app/user.jar
-
 # Start the application
-ENTRYPOINT ["java", "-Xmx256m", "-Xss256k", "-XX:MetaspaceSize=100m", "-jar", "user.jar"]
+ENTRYPOINT ["java", "-Xmx256m", "-Xss256k", "-XX:MetaspaceSize=100m", "-jar", "./build/libs/user-0.0.1-SNAPSHOT.jar"]

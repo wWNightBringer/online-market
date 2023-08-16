@@ -5,6 +5,8 @@ spring:
     name: user-service
   cloud:
     consul:
+      discovery:
+        health-check-path: /management/health
       host: ${CONSUL_HOST:localhost}
 
 management:
@@ -28,14 +30,13 @@ management:
   endpoint:
     health:
       show-details: when_authorized
-      roles: 'ROLE_ADMIN'
       probes:
         enabled: true
-  #      group:
-  #        liveness:
-  #          include: livenessState
-  #        readiness:
-  #          include: readinessState,db
+        group:
+          liveness:
+            include: livenessState
+          readiness:
+            include: readinessState
   info:
     git:
       mode: full

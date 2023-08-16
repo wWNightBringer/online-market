@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - 5444:5432
+      - 5432:5432
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 10s
@@ -42,7 +42,7 @@ services:
       CONSUL_HOST: consul
     ports:
       - 9001:9001
-    restart: on-failure
+    restart: always
     depends_on:
       - consul
       - postgresql
@@ -56,7 +56,7 @@ services:
       DATASOURCE_URL: jdbc:postgresql://postgresql:5432/onlinemarket
     ports:
       - 8081:8081
-    restart: on-failure
+    restart: always
     depends_on:
       - consul
       - postgresql
