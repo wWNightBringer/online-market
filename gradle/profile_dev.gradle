@@ -15,7 +15,7 @@ configurations {
 }
 
 dependencies {
-    developmentOnly "org.springframework.boot:spring-boot-devtools:3.1.1"
+    developmentOnly "org.springframework.boot:spring-boot-devtools:3.1.2"
     implementation "com.h2database:h2"
     testImplementation "org.testcontainers:postgresql"
 }
