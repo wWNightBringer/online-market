@@ -3,6 +3,14 @@ server:
 spring:
   application:
     name: user-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/users
+    username: postgres
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: validate
 
 management:
   endpoints:
