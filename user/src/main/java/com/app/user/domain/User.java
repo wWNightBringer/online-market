@@ -1,5 +1,6 @@
 package com.app.user.domain;
 
+import com.app.common.enumeration.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Where;
@@ -23,8 +24,6 @@ public class User {
     private String password;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_roles")
+    @Enumerated(EnumType.STRING)
     private Role role;
 }

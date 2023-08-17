@@ -1,9 +1,9 @@
 package com.app.user.service;
 
 import com.app.common.dto.UserDTO;
+import com.app.common.enumeration.Role;
 import com.app.user.domain.User;
-import com.app.user.dto.UserRegistrationDTO;
-import com.app.user.repository.RoleRepository;
+import com.app.common.dto.UserRegistrationDTO;
 import com.app.user.repository.UserRepository;
 import com.app.user.util.ArgonUtil;
 import jakarta.transaction.Transactional;
@@ -18,7 +18,6 @@ import java.util.Optional;
 public class RegistrationService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
     public UserDTO saveUser(UserRegistrationDTO userRegistrationDTO) {
         User save = userRepository.save(buildUser(userRegistrationDTO));
@@ -27,8 +26,9 @@ public class RegistrationService {
     }
 
     @Transactional
-    public void deleteUser(String login, String password) {
-        User user = getUserIfEmailAndPasswordAreCorrect(login, password);
+    public void deleteUser(String email) {
+        User user = userRepository.findUserByEmailOptional(email)
+                .orElseThrow(() -> new AccessDeniedException(""));
         userRepository.deleteById(user.getId());
     }
 
@@ -38,10 +38,10 @@ public class RegistrationService {
 
     private User buildUser(UserRegistrationDTO userDTO) {
         return User.builder()
-            .name(userDTO.getName())
-            .email(userDTO.getEmail())
-            .password(ArgonUtil.hashPassword(userDTO.getPassword()))
-            .role(roleRepository.findRoleByRoleName("USER"))
+            .name(userDTO.name())
+            .email(userDTO.email())
+            .password(ArgonUtil.hashPassword(userDTO.password()))
+            .role(Role.USER)
             .build();
     }
 

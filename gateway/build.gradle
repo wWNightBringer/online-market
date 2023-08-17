@@ -55,6 +55,7 @@ dependencies {
     implementation "org.springframework.security:spring-security-data"
     implementation "io.micrometer:micrometer-registry-prometheus"
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
+    implementation project(':common')
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.boot:spring-boot-test"
 }
