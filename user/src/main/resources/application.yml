@@ -7,6 +7,7 @@ spring:
     consul:
       discovery:
         health-check-path: /management/health
+        instance-zone: zone_1
       host: ${CONSUL_HOST:localhost}
 
 management:

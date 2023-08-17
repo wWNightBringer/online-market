@@ -55,20 +55,6 @@ services:
       - consul
       - postgresql
       - zipkin
-  online-market:
-    container_name: online-market-config
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      DATASOURCE_URL: jdbc:postgresql://postgresql:5432/onlinemarket
-    ports:
-      - 8081:8081
-    restart: always
-    depends_on:
-      - consul
-      - postgresql
-      - zipkin
   gateway:
     container_name: gateway-service
     build:
