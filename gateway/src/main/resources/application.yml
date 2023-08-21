@@ -31,7 +31,6 @@ spring:
     hikari:
       poolName: Hikari
       auto-commit: false
-    driver-class-name: org.postgresql.Driver
 
 management:
   endpoints:

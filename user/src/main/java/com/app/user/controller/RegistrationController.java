@@ -21,8 +21,8 @@ public class RegistrationController {
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
 
-    @DeleteMapping
-    public void deleteUser(@PathVariable String email){
+    @DeleteMapping("{email}")
+    public void deleteUser(@PathVariable(name = "email") String email){
         registrationService.deleteUser(email);
     }
 }

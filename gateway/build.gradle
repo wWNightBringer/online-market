@@ -53,9 +53,23 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter"
     implementation "org.springframework.cloud:spring-cloud-starter-consul-discovery"
     implementation "org.springframework.security:spring-security-data"
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+//    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
     implementation "io.micrometer:micrometer-registry-prometheus"
+
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.6.0'
+
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
+
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+
     implementation project(':common')
+    implementation project(':user')
+
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.boot:spring-boot-test"
 }

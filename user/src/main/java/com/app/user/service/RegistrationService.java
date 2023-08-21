@@ -1,17 +1,15 @@
 package com.app.user.service;
 
 import com.app.common.dto.UserDTO;
+import com.app.common.dto.UserRegistrationDTO;
 import com.app.common.enumeration.Role;
 import com.app.user.domain.User;
-import com.app.common.dto.UserRegistrationDTO;
 import com.app.user.repository.UserRepository;
 import com.app.user.util.ArgonUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +26,7 @@ public class RegistrationService {
     @Transactional
     public void deleteUser(String email) {
         User user = userRepository.findUserByEmailOptional(email)
-                .orElseThrow(() -> new AccessDeniedException(""));
+                .orElseThrow(() -> new AccessDeniedException("Email is incorrect"));
         userRepository.deleteById(user.getId());
     }
 
@@ -41,19 +39,7 @@ public class RegistrationService {
             .name(userDTO.name())
             .email(userDTO.email())
             .password(ArgonUtil.hashPassword(userDTO.password()))
-            .role(Role.USER)
+            .role(Role.CUSTOMER)
             .build();
-    }
-
-    private User getUserIfEmailAndPasswordAreCorrect(String email, String password) {
-        Optional<User> optionalUser = userRepository.findUserByEmailOptional(email);
-
-        optionalUser.ifPresent(user -> {
-            boolean equals = ArgonUtil.matchesUserPassword(password, user.getPassword());
-            if (!equals) {
-                throw new AccessDeniedException("Password is incorrect");
-            }
-        });
-        return optionalUser.orElseThrow(() -> new AccessDeniedException("Login is incorrect"));
     }
 }
