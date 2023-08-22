@@ -1,4 +1,4 @@
-package com.app.gateway.config.security;
+package com.app.common.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

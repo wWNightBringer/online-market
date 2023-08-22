@@ -9,7 +9,8 @@ spring:
         health-check-path: /management/health
         instance-zone: zone_1
       host: ${CONSUL_HOST:localhost}
-
+  security:
+    enabled: ${SECURITY_ENABLED:false}
 management:
   endpoints:
     web:
@@ -69,3 +70,4 @@ management:
         request:
           autotime:
             enabled: true
+

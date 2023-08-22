@@ -1,4 +1,4 @@
-package com.app.gateway.config.security;
+package com.app.common.security;
 
 /**
  * Constants for Spring Security authorities.

@@ -1,4 +1,4 @@
-package com.app.gateway.config;
+package com.app.common.security;
 
 /**
  * Application constants.
