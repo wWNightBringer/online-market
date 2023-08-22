@@ -17,5 +17,6 @@
     <property name="datetimeType" value="datetime" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/1692263135657_create_user.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

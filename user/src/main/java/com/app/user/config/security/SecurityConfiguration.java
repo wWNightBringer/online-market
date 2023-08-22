@@ -1,4 +1,4 @@
-package com.app.user.security;
+package com.app.user.config.security;
 
 import com.app.common.security.AuthoritiesConstants;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +28,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authz ->
                     // prettier-ignore
                     authz
-                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/h2-console/**", "/error/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
                         .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
