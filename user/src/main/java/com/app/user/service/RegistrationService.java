@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import static com.app.user.util.mapper.UserMapper.USER_MAPPER;
+
 @Service
 @RequiredArgsConstructor
 public class RegistrationService {
@@ -18,9 +20,9 @@ public class RegistrationService {
     private final UserRepository userRepository;
 
     public UserDTO saveUser(UserRegistrationDTO userRegistrationDTO) {
-        User save = userRepository.save(buildUser(userRegistrationDTO));
+        User user = userRepository.save(buildUser(userRegistrationDTO));
 
-        return getUserDTO(save);
+        return USER_MAPPER.map(user);
     }
 
     @Transactional
@@ -28,10 +30,6 @@ public class RegistrationService {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new AccessDeniedException("Email is incorrect"));
         userRepository.deleteById(user.getId());
-    }
-
-    private UserDTO getUserDTO(User save) {
-        return new UserDTO(save.getName(), save.getEmail());
     }
 
     private User buildUser(UserRegistrationDTO userDTO) {
