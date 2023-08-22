@@ -1,6 +1,14 @@
 server:
   port: 9001
 spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/onlinemarket
+    username: postgres
+    password: root
+    jpa:
+      hibernate:
+        ddl-auto: validate
   application:
     name: user-service
   cloud:
@@ -9,15 +17,8 @@ spring:
         health-check-path: /management/health
         instance-zone: zone_1
       host: ${CONSUL_HOST:localhost}
-
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/onlinemarket
-    username: postgres
-    password: root
-  jpa:
-    hibernate:
-      ddl-auto: validate
+  security:
+    enabled: ${SECURITY_ENABLED:false}
 management:
   endpoints:
     web:
@@ -77,3 +78,4 @@ management:
         request:
           autotime:
             enabled: true
+

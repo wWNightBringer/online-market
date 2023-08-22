@@ -1,13 +1,7 @@
-package com.app.gateway.config.security;
-
-import static com.app.gateway.config.security.SecurityUtils.AUTHORITIES_KEY;
-import static com.app.gateway.config.security.SecurityUtils.JWT_ALGORITHM;
+package com.app.common.security;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -18,15 +12,15 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-@Configuration
 public class SecurityJwtConfiguration {
 
-    @Value("${jhipster.security.authentication.jwt.base64-secret}")
-    private String jwtKey;
+    private static final String JWT_KEY = """
+        NmE5OTNhYzAwNzc1MjVjZjM3MjQ2MjRlMTZmZGZhNzUyOThkYWZmZjBjMTQxMGI4MTkzYTU4MjM4ZjM0ODgyOWUwNjhjYmQyODFjYzc2NmRhOTQzMDc0NjQxMzhlZDQ1MGY0NjVlYWRmYjcyMDdiMzk2ODlhZDQyMDQwMjE4ZjY=
+        """;
 
-    @Bean
     public JwtDecoder jwtDecoder(SecurityMetersService metersService) {
-        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(JWT_ALGORITHM).build();
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(
+            SecurityUtils.JWT_ALGORITHM).build();
         return token -> {
             try {
                 return jwtDecoder.decode(token);
@@ -45,16 +39,14 @@ public class SecurityJwtConfiguration {
         };
     }
 
-    @Bean
     public JwtEncoder jwtEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(getSecretKey()));
     }
 
-    @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthorityPrefix("");
-        grantedAuthoritiesConverter.setAuthoritiesClaimName(AUTHORITIES_KEY);
+        grantedAuthoritiesConverter.setAuthoritiesClaimName(SecurityUtils.AUTHORITIES_KEY);
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
@@ -62,7 +54,7 @@ public class SecurityJwtConfiguration {
     }
 
     private SecretKey getSecretKey() {
-        byte[] keyBytes = Base64.from(jwtKey).decode();
-        return new SecretKeySpec(keyBytes, 0, keyBytes.length, JWT_ALGORITHM.getName());
+        byte[] keyBytes = Base64.from(JWT_KEY).decode();
+        return new SecretKeySpec(keyBytes, 0, keyBytes.length, SecurityUtils.JWT_ALGORITHM.getName());
     }
 }
