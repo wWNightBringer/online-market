@@ -25,7 +25,7 @@ public class RegistrationService {
 
     @Transactional
     public void deleteUser(String email) {
-        User user = userRepository.findUserByEmailOptional(email)
+        User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new AccessDeniedException("Email is incorrect"));
         userRepository.deleteById(user.getId());
     }

@@ -23,8 +23,6 @@ public class User extends BaseModel {
     @Column(unique = true)
     private String email;
     private String password;
-    @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
     @Enumerated(EnumType.STRING)
     private Role role;
 }
