@@ -67,6 +67,18 @@ services:
       - consul
       - postgresql
       - zipkin
+  configuration:
+    container_name: configuration-service
+    build:
+      context: ./configuration
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8081
+    restart: always
+    depends_on:
+      - consul
+      - postgresql
+      - zipkin
 
 volumes:
   postgres_data:
