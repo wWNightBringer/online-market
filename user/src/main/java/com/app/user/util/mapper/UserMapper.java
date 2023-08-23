@@ -1,7 +1,10 @@
 package com.app.user.util.mapper;
 
 import com.app.common.dto.UserDTO;
+import com.app.common.dto.UserRegistrationDTO;
+import com.app.common.enumeration.Role;
 import com.app.user.domain.User;
+import com.app.user.util.ArgonUtil;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -12,5 +15,13 @@ public interface UserMapper {
 
     UserDTO map(User user);
 
-    User map(UserDTO userDTO);
+
+    default User map(UserRegistrationDTO userDTO) {
+        return User.builder()
+            .name(userDTO.name())
+            .email(userDTO.email())
+            .password(ArgonUtil.hashPassword(userDTO.password()))
+            .role(Role.CUSTOMER)
+            .build();
+    }
 }
