@@ -46,6 +46,7 @@ public class SecurityConfiguration {
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 )
+                .logout(out -> out.logoutUrl("**/logout"))
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt());
         } else {
             builder.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable());

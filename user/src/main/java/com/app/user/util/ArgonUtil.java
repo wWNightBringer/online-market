@@ -13,7 +13,7 @@ public class ArgonUtil {
         return ARGON_2.hash(4, 12000, 8, rawPassword.toString());
     }
 
-    public static Boolean matchesUserPassword(CharSequence rawPassword, String encodedPassword) {
+    public static boolean matchesUserPassword(CharSequence rawPassword, String encodedPassword) {
         return ARGON_2.verify(encodedPassword, rawPassword.toString());
     }
 }
