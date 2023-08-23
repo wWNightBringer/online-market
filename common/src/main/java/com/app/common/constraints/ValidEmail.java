@@ -10,7 +10,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
 @Constraint(validatedBy = ValidEmailValidator.class)
-@Target({FIELD, PARAMETER, TYPE, RECORD_COMPONENT, TYPE_USE, TYPE_PARAMETER, METHOD, LOCAL_VARIABLE})
+@Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
 public @interface ValidEmail {
     String message() default "Invalid email";
