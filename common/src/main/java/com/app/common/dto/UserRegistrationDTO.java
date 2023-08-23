@@ -1,5 +1,18 @@
 package com.app.common.dto;
 
-public record UserRegistrationDTO(String name, String email, String password) {
+import com.app.common.constraints.ValidEmail;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class UserRegistrationDTO {
+    private String name;
+    private @ValidEmail String email;
+    private String password;
 
 }

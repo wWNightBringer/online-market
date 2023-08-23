@@ -20,9 +20,4 @@ public class RegistrationController {
         UserDTO userDTO = registrationService.saveUser(userRegistrationDTO);
         return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
     }
-
-    @DeleteMapping("{email}")
-    public void deleteUser(@PathVariable(name = "email") String email){
-        registrationService.deleteUser(email);
-    }
 }
