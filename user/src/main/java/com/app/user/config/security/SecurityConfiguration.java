@@ -1,7 +1,8 @@
 package com.app.user.config.security;
 
 import com.app.common.security.AuthoritiesConstants;
-import org.springframework.beans.factory.annotation.Value;
+import com.app.user.config.SecurityConfigProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,14 +16,14 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    @Value("${spring.security.enabled}")
-    private boolean securityEnabled;
+    private final SecurityConfigProperties properties;
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity builder) throws Exception {
-        if (securityEnabled) {
+        if (properties.enabled()) {
             builder
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable())
                 .authorizeHttpRequests(authz ->
@@ -46,6 +47,7 @@ public class SecurityConfiguration {
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 )
+                .addFilter(new SecurityFilter())
                 .logout(out -> out.logoutUrl("**/logout"))
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt());
         } else {
