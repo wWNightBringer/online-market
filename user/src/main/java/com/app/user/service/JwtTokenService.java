@@ -9,6 +9,6 @@ import org.springframework.stereotype.Service;
 public class JwtTokenService {
 
     public String createToken(UserDTO userDTO, Role role) {
-        return JwtTokenUtils.getToken(userDTO.email(), userDTO.name(), role.name());
+        return JwtTokenUtils.getToken(userDTO.email(), userDTO.name(), role.getValue());
     }
 }

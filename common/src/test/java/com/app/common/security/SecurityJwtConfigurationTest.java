@@ -45,7 +45,7 @@ class SecurityJwtConfigurationTest {
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
 
         JwtEncoderParameters parameters = JwtEncoderParameters.from(jwsHeader, jwtClaims);
-        SecurityJwtConfiguration jwtConfiguration = new SecurityJwtConfiguration();
+        SecurityJwtUtils jwtConfiguration = new SecurityJwtUtils();
         Assertions.assertFalse(jwtConfiguration.jwtEncoder().encode(parameters).getTokenValue().isEmpty());
     }
 
