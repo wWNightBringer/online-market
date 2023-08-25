@@ -1,6 +1,7 @@
 package com.app.user.config.security;
 
 import com.app.common.enumeration.Role;
+import com.app.common.security.CommonLogoutSuccessHandler;
 import com.app.user.config.SecurityConfigProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -52,9 +53,11 @@ public class SecurityConfiguration {
                 )
                 .addFilterAfter(securityFilter, BasicAuthenticationFilter.class)
                 .logout(out -> {
-                    out.logoutUrl("**/logout");
+                    out.addLogoutHandler(new CommonLogoutSuccessHandler());
+                    out.logoutUrl("/logout");
                     out.invalidateHttpSession(true);
                     out.deleteCookies("JSESSIONID");
+                    out.permitAll();
                 });
         } else {
             builder.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable());
