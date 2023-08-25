@@ -1,5 +1,6 @@
-package com.app.common.exception_handler;
+package com.app.common.handler;
 
+import com.app.common.exception.InvalidEmailException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -9,12 +10,12 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(Throwable.class)
-    public ResponseEntity<Error> handleEmailValidationException(Throwable e) {
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<Error> handleMethodArgumentNotValidException(InvalidEmailException e) {
         return ResponseEntity.status(FORBIDDEN).body(showErrorMessage(e));
     }
 
-    private Error showErrorMessage(Throwable exception) {
+    private Error showErrorMessage(Exception exception) {
         return new Error(exception.getMessage());
     }
 
