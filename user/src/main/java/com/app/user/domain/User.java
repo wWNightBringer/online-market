@@ -1,6 +1,5 @@
 package com.app.user.domain;
 
-import com.app.common.constraints.ValidEmail;
 import com.app.common.domain.BaseModel;
 import com.app.common.enumeration.Role;
 import jakarta.persistence.*;
@@ -22,7 +21,6 @@ public class User extends BaseModel {
     private Integer id;
     private String name;
     @Column(unique = true)
-    @ValidEmail
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
