@@ -3,7 +3,7 @@ package com.app.common.enumeration;
 import com.app.common.exception.EnumNotFoundException;
 
 public enum Brand {
-    SUMSUNG("Sumsung"),
+    SAMSUNG("Samsung"),
     LG("LG"),
     ADIDAS("Adidas"),
     NIKE("Nike"),
