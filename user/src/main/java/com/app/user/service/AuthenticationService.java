@@ -6,7 +6,6 @@ import com.app.common.dto.TokenDTO;
 import com.app.common.dto.UserAuthenticationDTO;
 import com.app.common.dto.UserDTO;
 import com.app.common.enumeration.Exception;
-import com.app.common.enumeration.Role;
 import com.app.common.exception.PasswordException;
 import com.app.user.domain.User;
 import com.app.user.util.ArgonUtil;
@@ -25,7 +24,7 @@ public class AuthenticationService {
         verifyPassword(user, authenticationDTO.password());
 
         UserDTO userDTO = USER_MAPPER.map(user);
-        String token = jwtTokenService.createToken(userDTO, Role.CUSTOMER);
+        String token = jwtTokenService.createToken(userDTO, user.getRole());
 
         return new TokenDTO(token);
     }

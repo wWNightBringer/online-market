@@ -1,7 +1,9 @@
 package com.app.user.config.security;
 
-import com.app.common.security.AuthoritiesConstants;
-import org.springframework.beans.factory.annotation.Value;
+import com.app.common.enumeration.Role;
+import com.app.common.security.CommonLogoutSuccessHandler;
+import com.app.user.config.SecurityConfigProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,17 +14,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    @Value("${spring.security.enabled}")
-    private boolean securityEnabled;
+    private final SecurityConfigProperties properties;
+    private final SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity builder) throws Exception {
-        if (securityEnabled) {
+        if (properties.enabled()) {
             builder
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable())
                 .authorizeHttpRequests(authz ->
@@ -31,14 +35,15 @@ public class SecurityConfiguration {
                         .requestMatchers("/h2-console/**", "/error/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
-                        .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                        .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.getValue())
+                        .requestMatchers("/api/v1/authentication/login", "/api/v1/users/registration").permitAll()
                         .requestMatchers("/api/**").authenticated()
-                        .requestMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                        .requestMatchers("/v3/api-docs/**").hasRole(Role.ADMIN.getValue())
                         .requestMatchers("/management/health").permitAll()
                         .requestMatchers("/management/health/**").permitAll()
                         .requestMatchers("/management/info").permitAll()
                         .requestMatchers("/management/prometheus").permitAll()
-                        .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                        .requestMatchers("/management/**").hasRole(Role.ADMIN.getValue())
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exceptions ->
@@ -46,8 +51,14 @@ public class SecurityConfiguration {
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 )
-                .logout(out -> out.logoutUrl("**/logout"))
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt());
+                .addFilterAfter(securityFilter, BasicAuthenticationFilter.class)
+                .logout(out -> {
+                    out.addLogoutHandler(new CommonLogoutSuccessHandler());
+                    out.logoutUrl("/logout");
+                    out.invalidateHttpSession(true);
+                    out.deleteCookies("JSESSIONID");
+                    out.permitAll();
+                });
         } else {
             builder.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable());
         }

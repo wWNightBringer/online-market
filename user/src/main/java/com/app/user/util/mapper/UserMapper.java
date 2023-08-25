@@ -13,8 +13,12 @@ public interface UserMapper {
 
     UserMapper USER_MAPPER = Mappers.getMapper(UserMapper.class);
 
-    UserDTO map(User user);
-
+    default UserDTO map(User user) {
+        return new UserDTO(
+            user.getName(),
+            user.getEmail()
+        );
+    }
 
     default User map(UserRegistrationDTO userDTO) {
         return User.builder()

@@ -3,7 +3,7 @@ package com.app.common.enumeration;
 import com.app.common.exception.EnumNotFoundException;
 
 public enum Role {
-    ADMIN("admin"), CUSTOMER("customer"), ANONYMOUS("anonymous");
+    ADMIN("ADMIN"), CUSTOMER("CUSTOMER"), ANONYMOUS("ANONYMOUS");
 
     private final String value;
 
@@ -18,6 +18,10 @@ public enum Role {
             }
         }
         throw new EnumNotFoundException(Role.class, text);
+    }
+
+    public String getValue() {
+        return value;
     }
 
     @Override

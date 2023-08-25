@@ -6,9 +6,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/onlinemarket
     username: postgres
     password: root
-    jpa:
-      hibernate:
-        ddl-auto: validate
   application:
     name: user-service
   cloud:
@@ -17,8 +14,9 @@ spring:
         health-check-path: /management/health
         instance-zone: zone_1
       host: ${CONSUL_HOST:localhost}
-  security:
-    enabled: ${SECURITY_ENABLED:false}
+  jpa:
+    hibernate:
+      ddl-auto: validate
 management:
   endpoints:
     web:
@@ -78,4 +76,5 @@ management:
         request:
           autotime:
             enabled: true
-
+security:
+  enabled: ${SECURITY_ENABLED:false}
