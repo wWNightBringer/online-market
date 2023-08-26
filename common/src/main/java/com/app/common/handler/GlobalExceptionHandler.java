@@ -1,6 +1,7 @@
 package com.app.common.handler;
 
 import com.app.common.exception.InvalidEmailException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,7 +12,15 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidEmailException.class)
-    public ResponseEntity<String> handleMethodArgumentNotValidException(InvalidEmailException e) {
-        return ResponseEntity.status(NOT_FOUND).body(e.getLocalizedMessage());
+    public ResponseEntity<Error> handleMethodArgumentNotValidException(InvalidEmailException emailException) {
+        return ResponseEntity.status(NOT_FOUND).body(showErrorMessage(NOT_FOUND, emailException));
+    }
+
+    public Error showErrorMessage(HttpStatus status,RuntimeException runtimeException){
+        return new Error(status, runtimeException.getMessage());
+    }
+
+    public record Error(HttpStatus status, String message){
+
     }
 }
