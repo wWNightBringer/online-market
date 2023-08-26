@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServic
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @EnableConfigurationProperties(SecurityConfigProperties.class)
-@SpringBootApplication(exclude = { UserDetailsServiceAutoConfiguration.class })
+@SpringBootApplication(
+    exclude = {UserDetailsServiceAutoConfiguration.class},
+    scanBasePackages = {"com.app.user", "com.app.common.handler"})
 public class UserApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserApplication.class, args);

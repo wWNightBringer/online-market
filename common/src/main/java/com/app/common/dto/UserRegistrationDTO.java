@@ -1,5 +1,7 @@
 package com.app.common.dto;
 
-public record UserRegistrationDTO(String name, String email, String password) {
+import com.app.common.constraints.ValidEmail;
+
+public record UserRegistrationDTO(String name, @ValidEmail String email, String password) {
 
 }
