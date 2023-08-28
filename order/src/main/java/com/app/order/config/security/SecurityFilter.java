@@ -3,8 +3,11 @@ package com.app.order.config.security;
 import static com.app.common.security.JwtTokenUtils.getToken;
 import static com.app.common.security.JwtTokenUtils.hasAuthorizationBearer;
 
+import com.app.common.dto.UserDTO;
+import com.app.common.enumeration.Role;
 import com.app.common.enumeration.SystemEnum;
 import com.app.common.security.SecurityJwtUtils;
+import com.app.order.client.UserClient;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -13,20 +16,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class SecurityFilter extends GenericFilterBean {
 
-   // private final UserService userService;
+    private final UserClient userClient;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -48,11 +54,11 @@ public class SecurityFilter extends GenericFilterBean {
         Map<String, Object> claims = jwt.getClaims();
         var email = (String) claims.get(SystemEnum.EMAIL_PARAM.getValue());
 
-       // com.app.user.domain.User user = userService.getUser(email);
+        UserDTO userDTO = userClient.getUserByEmail(email, token);
 
-       // UserDetails userDetails = buildUserDetails(user);
+        UserDetails userDetails = buildUserDetails(userDTO);
 
-       // setAuthenticationContext(userDetails);
+        setAuthenticationContext(userDetails);
         chain.doFilter(request, response);
     }
 
@@ -63,13 +69,10 @@ public class SecurityFilter extends GenericFilterBean {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-//    private static UserDetails buildUserDetails(com.app.user.domain.User user) {
-//        List<SimpleGrantedAuthority> authorities =
-//            Stream.of(Role.values())
-//                .filter(r -> r.equals(user.getRole()))
-//                .map(role -> new SimpleGrantedAuthority(role.getValue()))
-//                .toList();
-//
-//        return new User(user.getEmail(), user.getPassword(), authorities);
-//    }
+    private static UserDetails buildUserDetails(UserDTO userDTO) {
+        String role = (userDTO.name().equals("admin")) ? Role.ADMIN.getValue() : Role.CUSTOMER.getValue();
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
+
+        return new User(userDTO.email(), "", authorities);
+    }
 }
