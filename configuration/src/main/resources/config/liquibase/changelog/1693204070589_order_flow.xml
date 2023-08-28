@@ -19,10 +19,10 @@
             <column name="count" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="brand" type="varchar(100)">
+            <column name="product_brand" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="group" type="varchar(100)">
+            <column name="product_group" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
             <column name="create_date" type="timestamp">
