@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/h2-console/**", "/error/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.getValue())
                         .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/api/v1/products/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").hasRole(Role.ADMIN.getValue())
                         .requestMatchers("/management/health").permitAll()
                         .requestMatchers("/management/health/**").permitAll()
