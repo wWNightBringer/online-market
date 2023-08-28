@@ -32,14 +32,13 @@ public class SecurityConfiguration {
                     // prettier-ignore
                     authz
                         .requestMatchers("/h2-console/**", "/error/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.getValue())
                         .requestMatchers("/api/**").authenticated()
-                        .requestMatchers("/v3/api-docs/**").hasRole(Role.ADMIN.getValue())
+                        .requestMatchers("/v3/api-docs/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/management/health").permitAll()
                         .requestMatchers("/management/health/**").permitAll()
                         .requestMatchers("/management/info").permitAll()
                         .requestMatchers("/management/prometheus").permitAll()
-                        .requestMatchers("/management/**").hasRole(Role.ADMIN.getValue())
+                        .requestMatchers("/management/**").hasRole(Role.ADMIN.name())
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exceptions ->
