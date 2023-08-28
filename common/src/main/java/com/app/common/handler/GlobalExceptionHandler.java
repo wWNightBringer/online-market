@@ -17,11 +17,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(NOT_FOUND).body(showErrorMessage(NOT_FOUND, emailException));
     }
 
-    public Error showErrorMessage(HttpStatus status, RuntimeException runtimeException) {
+    public Error showErrorMessage(HttpStatus status,RuntimeException runtimeException){
         return new Error(status, runtimeException.getMessage());
     }
 
-    private record Error(HttpStatus status, String message) {
+    private record Error(HttpStatus status, String message){
 
     }
 }

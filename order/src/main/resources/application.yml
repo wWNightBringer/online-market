@@ -1,5 +1,5 @@
 server:
-  port: 9001
+  port: 9002
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -7,7 +7,7 @@ spring:
     username: postgres
     password: root
   application:
-    name: user-service
+    name: order-service
   cloud:
     consul:
       discovery:
@@ -78,3 +78,4 @@ management:
             enabled: true
 security:
   enabled: ${SECURITY_ENABLED:false}
+

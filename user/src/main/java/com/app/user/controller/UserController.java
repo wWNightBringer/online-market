@@ -21,8 +21,8 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDTO> registerUser(@RequestBody @Valid UserRegistrationDTO userRegistrationDTO) {
-        UserDTO userDTO = userService.registerUser(userRegistrationDTO);
-        return ResponseEntity.created(URI.create("/api/v1/users")).body(userDTO);
+            UserDTO userDTO = userService.registerUser(userRegistrationDTO);
+            return ResponseEntity.created(URI.create("/api/v1/users")).body(userDTO);
     }
 
     @DeleteMapping("{email}")

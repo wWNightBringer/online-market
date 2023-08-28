@@ -14,4 +14,4 @@ pluginManagement {
 }
 
 rootProject.name = "online-market"
-include ':user', ':gateway', ':common' , ':configuration'
+include ':user', ':gateway', ':common' , ':configuration', ':order'
