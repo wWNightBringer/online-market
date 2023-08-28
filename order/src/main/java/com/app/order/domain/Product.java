@@ -25,9 +25,11 @@ public class Product extends BaseModel {
     private String uuid;
     private String title;
 
+    @Column(name = "product_group")
     @Enumerated(EnumType.STRING)
     private Group group;
 
+    @Column(name = "product_brand")
     @Enumerated(EnumType.STRING)
     private Brand brand;
 
