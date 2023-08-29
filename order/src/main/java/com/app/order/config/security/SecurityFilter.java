@@ -1,8 +1,5 @@
 package com.app.order.config.security;
 
-import static com.app.common.security.JwtTokenUtils.getToken;
-import static com.app.common.security.JwtTokenUtils.hasAuthorizationBearer;
-
 import com.app.common.dto.UserDTO;
 import com.app.common.enumeration.Role;
 import com.app.common.enumeration.SystemEnum;
@@ -27,6 +24,9 @@ import org.springframework.web.filter.GenericFilterBean;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import static com.app.common.security.JwtTokenUtils.getToken;
+import static com.app.common.security.JwtTokenUtils.hasAuthorizationBearer;
 
 @Component
 @RequiredArgsConstructor
@@ -64,13 +64,13 @@ public class SecurityFilter extends GenericFilterBean {
 
     public static void setAuthenticationContext(UserDetails userDetails) {
         UsernamePasswordAuthenticationToken authentication
-            = new UsernamePasswordAuthenticationToken(userDetails, null, null);
+            = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     private static UserDetails buildUserDetails(UserDTO userDTO) {
-        String role = (userDTO.name().equals("admin")) ? Role.ADMIN.getValue() : Role.CUSTOMER.getValue();
+        String role = (userDTO.name().equals("Admin")) ? Role.ADMIN.getValue() : Role.CUSTOMER.getValue();
         List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
 
         return new User(userDTO.email(), "", authorities);

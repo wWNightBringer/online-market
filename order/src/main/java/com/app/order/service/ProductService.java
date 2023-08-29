@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.app.order.util.mapper.OrderMapper.*;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -18,12 +20,13 @@ public class ProductService {
 
     @Transactional
     public ProductDTO addProduct(CreateProductDTO createProductDTO) {
-        Product product = productRepository.save(buildProduct(createProductDTO));
-        return getProductDTO(product);
+        Product product = productRepository.save(createMap(createProductDTO));
+        return map(product);
     }
 
+    @Transactional(readOnly = true)
     public ProductDTO getProductByTitle(String title) {
-        return getProductDTO(productRepository.findProductByTitle(title));
+        return map(productRepository.findProductByTitle(title));
     }
 
     @Transactional
@@ -32,32 +35,9 @@ public class ProductService {
         productRepository.deleteProductById(product.getId());
     }
 
-    public Page<ProductDTO> getAllProducts(Pageable pageable){
-        return getProductPage(productRepository.findAll(pageable));
-    }
-
-    private ProductDTO getProductDTO(Product product) {
-        return new ProductDTO(
-            product.getUuid(),
-            product.getTitle(),
-            product.getGroup(),
-            product.getBrand(),
-            product.getPrice(),
-            product.getCount());
-    }
-
-    private Page<ProductDTO> getProductPage(Page<Product> products){
-        return products.map(this::getProductDTO);
-    }
-
-    private Product buildProduct(CreateProductDTO createProductDTO) {
-        return Product.builder()
-            .uuid(createProductDTO.uuid())
-            .title(createProductDTO.title())
-            .group(createProductDTO.group())
-            .brand(createProductDTO.brand())
-            .price(createProductDTO.price())
-            .count(createProductDTO.count())
-            .build();
+    @Transactional(readOnly = true)
+    public Page<ProductDTO> getAllProducts(Pageable pageable) {
+        Page<Product> productPage = productRepository.findAll(pageable);
+        return pageMap(productPage);
     }
 }

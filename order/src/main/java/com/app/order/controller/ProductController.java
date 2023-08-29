@@ -28,9 +28,11 @@ public class ProductController {
     }
 
     @DeleteMapping("/{title}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteProduct(@PathVariable(name = "title") String title) {
         productService.deleteProduct(title);
     }
+
     @GetMapping
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
         return productService.getAllProducts(pageable);
