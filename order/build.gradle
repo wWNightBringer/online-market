@@ -28,6 +28,7 @@ ext {
 dependencies {
     // Internal party
     implementation project(":common")
+    implementation project(":user")
 
     implementation "org.mapstruct:mapstruct:1.5.5.Final"
     annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
