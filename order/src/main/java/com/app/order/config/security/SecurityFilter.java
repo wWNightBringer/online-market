@@ -64,13 +64,13 @@ public class SecurityFilter extends GenericFilterBean {
 
     public static void setAuthenticationContext(UserDetails userDetails) {
         UsernamePasswordAuthenticationToken authentication
-            = new UsernamePasswordAuthenticationToken(userDetails, null, null);
+            = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     private static UserDetails buildUserDetails(UserDTO userDTO) {
-        String role = (userDTO.name().equals("admin")) ? Role.ADMIN.getValue() : Role.CUSTOMER.getValue();
+        String role = (userDTO.name().equals("Admin")) ? Role.ADMIN.getValue() : Role.CUSTOMER.getValue();
         List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
 
         return new User(userDTO.email(), "", authorities);
