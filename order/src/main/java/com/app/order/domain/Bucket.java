@@ -1,11 +1,9 @@
 package com.app.order.domain;
 
 import com.app.common.domain.BaseModel;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +11,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "bucket")
+//@Entity
+//@Table(name = "bucket")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
