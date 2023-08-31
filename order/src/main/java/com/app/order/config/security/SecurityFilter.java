@@ -1,8 +1,5 @@
 package com.app.order.config.security;
 
-import static com.app.common.security.JwtTokenUtils.getToken;
-import static com.app.common.security.JwtTokenUtils.hasAuthorizationBearer;
-
 import com.app.common.dto.UserDTO;
 import com.app.common.enumeration.Role;
 import com.app.common.enumeration.SystemEnum;
@@ -27,6 +24,9 @@ import org.springframework.web.filter.GenericFilterBean;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import static com.app.common.security.JwtTokenUtils.getToken;
+import static com.app.common.security.JwtTokenUtils.hasAuthorizationBearer;
 
 @Component
 @RequiredArgsConstructor
