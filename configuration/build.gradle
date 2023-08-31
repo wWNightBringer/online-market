@@ -17,7 +17,6 @@ apply from: "../gradle/liquibase.gradle"
 apply from: "../gradle/cache.gradle"
 
 apply from: "../gradle/docker.gradle"
-apply from: "../gradle/zipkin.gradle"
 
 group = 'com.app.market'
 version = '0.0.1-SNAPSHOT'
