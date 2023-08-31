@@ -5,5 +5,5 @@ import com.app.common.enumeration.Group;
 
 import java.math.BigDecimal;
 
-public record CreateProductDTO(String uuid, String title, Group group, Brand brand, BigDecimal price, int count) {
+public record CreateProductDTO(String title, Group group, Brand brand, BigDecimal price, int count) {
 }
