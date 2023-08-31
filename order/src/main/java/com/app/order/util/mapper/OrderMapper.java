@@ -6,6 +6,7 @@ import com.app.order.domain.Product;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.UUID;
 
 public class OrderMapper {
 
@@ -30,6 +31,7 @@ public class OrderMapper {
 
     public static Product createMap(CreateProductDTO createProductDTO) {
         return Product.builder()
+            .uuid(UUID.randomUUID().toString())
             .title(createProductDTO.title())
             .group(createProductDTO.group())
             .brand(createProductDTO.brand())
