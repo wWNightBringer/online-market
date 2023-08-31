@@ -37,6 +37,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-consul-discovery'
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
     implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation "org.springframework.batch:spring-batch-core:5.0.3"
     runtimeOnly "io.micrometer:micrometer-registry-prometheus"
 
     compileOnly 'org.projectlombok:lombok'

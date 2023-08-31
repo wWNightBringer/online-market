@@ -38,9 +38,9 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public int getUserIdById(int id) {
+    public UserDTO getUserIdById(int id) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(Exception.USER_NOT_FOUND.name()));
-        return user.getId();
+        return USER_MAPPER.map(user);
     }
 }
