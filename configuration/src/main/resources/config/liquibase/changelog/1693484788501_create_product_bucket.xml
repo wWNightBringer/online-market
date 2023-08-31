@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="create_product_bucket" author="Andrew">
+        <createTable tableName="product_bucket">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="product_id" type="INT"/>
+            <column name="bucket_id" type="INT"/>
+            <column name="product_count" type="INT"/>
+        </createTable>
+
+        <addUniqueConstraint constraintName="unique_product_bucket"
+                             tableName="product_bucket"
+                             columnNames="product_id, bucket_id"/>
+    </changeSet>
+</databaseChangeLog>
