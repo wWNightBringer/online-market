@@ -45,9 +45,6 @@ spring:
     console:
       # disable spring boot built-in h2-console since we start it manually with correct configuration
       enabled: false
-  liquibase:
-    # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
@@ -65,7 +62,7 @@ server:
 jhipster:
   cache: # Cache configuration
     hazelcast: # Hazelcast distributed cache
-      time-to-live-seconds: 3600
+      time-to-live-seconds: 120
       backup-count: 1
   # CORS is disabled by default on microservices, as you should access them through a gateway.
   # If you want to enable it, please uncomment the configuration below.
