@@ -6,7 +6,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkstyle Main') {
+        stage('Checkstyle') {
                 steps {
                     sh './gradlew checkstyleMain'
                 }
