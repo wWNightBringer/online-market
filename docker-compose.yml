@@ -33,16 +33,28 @@ services:
     volumes:
       - ./central-server-config:/config
     command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
-  zipkin:
-    image: ghcr.io/openzipkin/zipkin-slim:latest
-    container_name: zipkin
-    environment:
-      - STORAGE_TYPE=mem
-      - POSTGRES_HOST=postgres
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    command:
+        - '--config.file=/etc/prometheus/prometheus.yml'
+      # If you want to expose these ports outside your dev PC,
+      # remove the "127.0.0.1:" prefix
     ports:
-      - 9411:9411
-    networks:
-      - zipkin
+      - 9090:9090
+  grafana:
+    image: grafana/grafana:10.0.2
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+      # If you want to expose these ports outside your dev PC,
+      # remove the "127.0.0.1:" prefix
+    ports:
+      - 3000:3000
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     environment:
@@ -75,7 +87,7 @@ services:
     depends_on:
       - consul
       - postgresql
-      - zipkin
+      - prometheus
       - kafka
   gateway:
     container_name: gateway-service
@@ -88,7 +100,7 @@ services:
     depends_on:
       - consul
       - postgresql
-      - zipkin
+      - prometheus
       - kafka
   configuration:
     container_name: configuration-service
@@ -101,7 +113,7 @@ services:
     depends_on:
       - consul
       - postgresql
-      - zipkin
+      - prometheus
       - kafka
 
 volumes:
@@ -109,8 +121,6 @@ volumes:
     driver: local
 networks:
   consul:
-    driver: bridge
-  zipkin:
     driver: bridge
   service:
     driver: bridge

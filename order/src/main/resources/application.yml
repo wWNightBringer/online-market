@@ -11,7 +11,7 @@ spring:
   cloud:
     consul:
       discovery:
-        health-check-path: /management/health
+        health-check-path: /actuator/health
         instance-zone: zone_1
       host: ${CONSUL_HOST:localhost}
   jpa:
@@ -20,21 +20,9 @@ spring:
 management:
   endpoints:
     web:
-      base-path: /management
       exposure:
-        include:
-          - configprops
-          - env
-          - health
-          - info
-          - jhimetrics
-          - jhiopenapigroups
-          - logfile
-          - loggers
-          - prometheus
-          - threaddump
-          - caches
-          - liquibase
+        include: "*"
+    enabled-by-default: true
   endpoint:
     health:
       show-details: when_authorized

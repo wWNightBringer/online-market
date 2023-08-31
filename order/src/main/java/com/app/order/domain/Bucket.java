@@ -26,7 +26,7 @@ public class Bucket extends BaseModel {
     private BigDecimal totalCost;
     @Column(name = "product_count")
     private int productCount;
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+//    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "user_id")
+//    private User user;
 }
