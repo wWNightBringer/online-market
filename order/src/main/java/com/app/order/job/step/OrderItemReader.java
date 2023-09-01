@@ -9,6 +9,7 @@ import com.app.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,12 +20,19 @@ public class OrderItemReader implements ItemReader<JobDTO> {
 
     private final OrderRepository orderRepository;
 
+    private boolean batchJobState = true;
+
+    @Transactional(readOnly = true)
     @Override
     public JobDTO read() {
-        List<Order> orders = orderRepository.findAllByStateIs(State.OPEN);
-        List<Product> products = getProducts(orders);
+        if (batchJobState) {
+            List<Order> orders = orderRepository.findAllByStateIs(State.OPEN);
+            List<Product> products = getProducts(orders);
 
-        return new JobDTO(orders, products);
+            batchJobState = false;
+            return new JobDTO(orders, products);
+        }
+        return null;
     }
 
     private List<Product> getProducts(List<Order> orders) {

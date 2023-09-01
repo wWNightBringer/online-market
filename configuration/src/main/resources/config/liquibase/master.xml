@@ -21,5 +21,6 @@
     <include file="config/liquibase/changelog/1692779859591_create_default_user.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/1693204070589_order_flow.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/1693484788501_create_product_bucket.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/1693561495131_create_spring_batch_schema.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

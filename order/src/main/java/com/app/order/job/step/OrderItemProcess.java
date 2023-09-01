@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrderItemProcess implements ItemProcessor<JobDTO, JobDTO> {
+
     @Override
     public JobDTO process(JobDTO jobDTO) throws Exception {
-        return null;
+        return jobDTO;
     }
 }

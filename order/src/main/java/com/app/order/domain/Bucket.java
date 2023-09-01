@@ -1,7 +1,6 @@
 package com.app.order.domain;
 
 import com.app.common.domain.BaseModel;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,12 @@ import java.util.List;
 @Table(schema = "public", name = "buckets")
 @Builder
 @Where(clause = "is_deleted = false")
+@NamedEntityGraph(
+    name = Bucket.BUCKET_ENTITY_GRAPH_NAME,
+    attributeNodes = {@NamedAttributeNode("products")})
 public class Bucket extends BaseModel {
+
+    public static final String BUCKET_ENTITY_GRAPH_NAME = "getAllBuckets";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +49,7 @@ public class Bucket extends BaseModel {
     @Column(name = "user_id")
     private int userId;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "product_bucket",
         joinColumns = {

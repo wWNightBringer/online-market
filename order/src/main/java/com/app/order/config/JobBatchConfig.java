@@ -26,7 +26,7 @@ import javax.sql.DataSource;
 @EnableBatchProcessing
 public class JobBatchConfig {
 
-    @Bean
+    @Bean("orderJob")
     public Job job(JobRepository jobRepository, MeterRegistry meterRegistry, @Qualifier("orderStep") Step step) {
         return new JobBuilder("Order job", jobRepository)
             .preventRestart()

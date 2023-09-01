@@ -17,7 +17,12 @@ import java.time.LocalDateTime;
 @Table(schema = "public", name = "orders")
 @Builder
 @Where(clause = "is_deleted = false")
+@NamedEntityGraph(
+    name = Order.ORDER_ENTITY_GRAPH_NAME,
+    attributeNodes = {@NamedAttributeNode("bucket")})
 public class Order extends BaseModel {
+
+    public static final String ORDER_ENTITY_GRAPH_NAME = "getAllOrder";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +34,7 @@ public class Order extends BaseModel {
     private LocalDateTime deliveryDate;
     @Enumerated(EnumType.STRING)
     private State state;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bucket_id")
     private Bucket bucket;
