@@ -33,6 +33,12 @@ public class Order extends BaseModel {
     private BigDecimal orderNumber;
     @Column(name = "delivery_date")
     private LocalDateTime deliveryDate;
+    @Column(name = "total_cost")
+    private BigDecimal totalCost;
+    @Column(name = "product_count")
+    private int productCount;
+    @Column(name = "user_id")
+    private int userId;
     @Enumerated(EnumType.STRING)
     private State state;
 
