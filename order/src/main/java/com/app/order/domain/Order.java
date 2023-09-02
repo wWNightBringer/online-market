@@ -8,6 +8,7 @@ import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 @Where(clause = "is_deleted = false")
 @NamedEntityGraph(
     name = Order.ORDER_ENTITY_GRAPH_NAME,
-    attributeNodes = {@NamedAttributeNode("bucket")})
+    attributeNodes = {@NamedAttributeNode("products")})
 public class Order extends BaseModel {
 
     public static final String ORDER_ENTITY_GRAPH_NAME = "getAllOrder";
@@ -35,7 +36,15 @@ public class Order extends BaseModel {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bucket_id")
-    private Bucket bucket;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "product_order",
+        joinColumns = {
+            @JoinColumn(name = "order_id")
+        },
+        inverseJoinColumns = {
+            @JoinColumn(name = "product_id")
+        }
+    )
+    private List<Product> products;
 }

@@ -14,15 +14,15 @@ import lombok.Setter;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "product_bucket")
+@Table(name = "product_order")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductBucket {
+public class ProductOrder {
 
     @EmbeddedId
-    private ProductBucketKey productBucketKey;
+    private ProductOrderKey productOrderKey;
 
     @Column(name = "product_count")
     private Integer productCount;
@@ -32,12 +32,12 @@ public class ProductBucket {
     @NoArgsConstructor
     @AllArgsConstructor
     @EqualsAndHashCode
-    static class ProductBucketKey implements Serializable {
+    static class ProductOrderKey implements Serializable {
 
         @Column(name = "product_id")
         private Integer productId;
 
-        @Column(name = "bucket_id")
-        private Integer bucketId;
+        @Column(name = "order_id")
+        private Integer orderId;
     }
 }

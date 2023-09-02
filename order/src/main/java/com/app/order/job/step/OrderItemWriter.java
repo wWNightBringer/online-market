@@ -7,8 +7,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrderItemWriter implements ItemWriter<JobDTO> {
+
     @Override
-    public void write(Chunk<? extends JobDTO> chunk) throws Exception {
+    public void write(Chunk<? extends JobDTO> chunk) {
 
     }
 }

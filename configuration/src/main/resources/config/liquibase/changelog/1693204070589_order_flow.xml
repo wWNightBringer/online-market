@@ -35,12 +35,21 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createTable tableName="buckets">
+        <createTable tableName="orders">
             <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="uuid" type="varchar(37)">
                 <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="order_number" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="delivery_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="varchar(30)">
+                <constraints nullable="false"/>
             </column>
             <column name="total_cost" type="NUMERIC">
                 <constraints nullable="false"/>
@@ -61,46 +70,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createTable tableName="orders">
-            <column name="id" type="INT" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="uuid" type="varchar(37)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="order_number" type="NUMERIC">
-                <constraints nullable="false"/>
-            </column>
-            <column name="delivery_date" type="timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="state" type="varchar(30)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="bucket_id" type="INT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="create_date" type="timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="update_date" type="timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="is_deleted" type="boolean">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
 
-        <addForeignKeyConstraint baseTableName="buckets"
+        <addForeignKeyConstraint baseTableName="orders"
                                  baseColumnNames="user_id"
                                  constraintName="fk_user_id"
                                  referencedTableName="users"
                                  referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="orders"
-                                 baseColumnNames="bucket_id"
-                                 constraintName="fk_bucket_id"
-                                 referencedTableName="buckets"
-                                 referencedColumnNames="id"
-                                 onDelete="CASCADE"/>
     </changeSet>
 </databaseChangeLog>

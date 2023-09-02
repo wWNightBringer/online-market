@@ -1,7 +1,6 @@
 package com.app.order.job.step;
 
 import com.app.common.enumeration.State;
-import com.app.order.domain.Bucket;
 import com.app.order.domain.Order;
 import com.app.order.domain.Product;
 import com.app.order.job.JobDTO;
@@ -37,8 +36,7 @@ public class OrderItemReader implements ItemReader<JobDTO> {
 
     private List<Product> getProducts(List<Order> orders) {
         return orders.stream()
-            .map(Order::getBucket)
-            .map(Bucket::getProducts)
+            .map(Order::getProducts)
             .flatMap(Collection::stream)
             .toList();
     }
