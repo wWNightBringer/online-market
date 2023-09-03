@@ -1,6 +1,9 @@
 server:
   port: 9002
 spring:
+  batch:
+    job:
+      enabled: false
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/onlinemarket}
