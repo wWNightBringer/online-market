@@ -1,6 +1,5 @@
 package com.app.order.controller;
 
-import com.app.common.dto.CreateProductDTO;
 import com.app.common.dto.ProductDTO;
 import com.app.common.dto.ResponsePage;
 import com.app.order.service.ProductService;
@@ -20,8 +19,8 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ProductDTO addProduct(@RequestBody CreateProductDTO createProductDTO) {
-        return productService.addProduct(createProductDTO);
+    public ProductDTO addProduct(@RequestBody ProductDTO productDTO) {
+        return productService.addProduct(productDTO);
     }
 
     @GetMapping("/{title}")

@@ -1,6 +1,5 @@
 package com.app.order.util.mapper;
 
-import com.app.common.dto.CreateProductDTO;
 import com.app.common.dto.ProductDTO;
 import com.app.order.domain.Product;
 import org.springframework.data.domain.Page;
@@ -10,10 +9,9 @@ import java.util.UUID;
 
 public class OrderMapper {
 
-    private OrderMapper() {
-    }
+    private OrderMapper(){}
 
-    public static ProductDTO map(Product product) {
+    public static ProductDTO mapProduct(Product product) {
         return new ProductDTO(
             product.getTitle(),
             product.getGroup(),
@@ -22,21 +20,20 @@ public class OrderMapper {
             product.getCount());
     }
 
-
     public static List<ProductDTO> pageMap(Page<Product> products) {
         return products.getContent().stream()
-            .map(OrderMapper::map)
+            .map(OrderMapper::mapProduct)
             .toList();
     }
 
-    public static Product createMap(CreateProductDTO createProductDTO) {
+    public static Product createMap(ProductDTO productDTO) {
         return Product.builder()
             .uuid(UUID.randomUUID().toString())
-            .title(createProductDTO.title())
-            .group(createProductDTO.group())
-            .brand(createProductDTO.brand())
-            .price(createProductDTO.price())
-            .count(createProductDTO.count())
+            .title(productDTO.title())
+            .group(productDTO.group())
+            .brand(productDTO.brand())
+            .price(productDTO.price())
+            .count(productDTO.count())
             .build();
     }
 }

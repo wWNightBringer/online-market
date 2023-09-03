@@ -1,6 +1,5 @@
 package com.app.order.service;
 
-import com.app.common.dto.CreateProductDTO;
 import com.app.common.dto.ProductDTO;
 import com.app.order.domain.Product;
 import com.app.order.repository.ProductRepository;
@@ -21,14 +20,14 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public ProductDTO addProduct(CreateProductDTO createProductDTO) {
-        Product product = productRepository.save(createMap(createProductDTO));
-        return map(product);
+    public ProductDTO addProduct(ProductDTO productDTO) {
+        Product product = productRepository.save(createMap(productDTO));
+        return mapProduct(product);
     }
 
     @Transactional(readOnly = true)
     public ProductDTO getProductByTitle(String title) {
-        return map(productRepository.findProductByTitle(title));
+        return mapProduct(productRepository.findProductByTitle(title));
     }
 
     @Transactional
