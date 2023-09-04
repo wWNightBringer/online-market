@@ -20,7 +20,7 @@ import java.util.List;
 @Where(clause = "is_deleted = false")
 @NamedEntityGraph(
     name = Order.ORDER_ENTITY_GRAPH_NAME,
-    attributeNodes = {@NamedAttributeNode("products")})
+    attributeNodes = {@NamedAttributeNode("productOrders")})
 public class Order extends BaseModel {
 
     public static final String ORDER_ENTITY_GRAPH_NAME = "getAllOrder";
@@ -42,15 +42,7 @@ public class Order extends BaseModel {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "product_order",
-        joinColumns = {
-            @JoinColumn(name = "order_id")
-        },
-        inverseJoinColumns = {
-            @JoinColumn(name = "product_id")
-        }
-    )
-    private List<Product> products;
+    @JoinColumn(name = "order_id")
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<ProductOrder> productOrders;
 }
