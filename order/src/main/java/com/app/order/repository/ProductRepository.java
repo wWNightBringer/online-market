@@ -13,4 +13,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Modifying
     @Query("UPDATE Product p SET p.isDeleted = true WHERE p.id=:id")
     void deleteProductById(@Param("id") Integer id);
+
+    @Modifying
+    @Query("UPDATE Product p SET p.count = p.count-:count WHERE p.id=:id")
+    int takeProductCountToOrder(@Param("count") int count, @Param("id") Integer id);
 }

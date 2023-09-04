@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.UUID;
 
-public class OrderMapper {
+public class ProductMapper {
 
-    private OrderMapper(){}
+    private ProductMapper(){}
 
     public static ProductDTO mapProduct(Product product) {
         return new ProductDTO(
@@ -22,11 +22,11 @@ public class OrderMapper {
 
     public static List<ProductDTO> pageMap(Page<Product> products) {
         return products.getContent().stream()
-            .map(OrderMapper::mapProduct)
+            .map(ProductMapper::mapProduct)
             .toList();
     }
 
-    public static Product createMap(ProductDTO productDTO) {
+    public static Product mapProduct(ProductDTO productDTO) {
         return Product.builder()
             .uuid(UUID.randomUUID().toString())
             .title(productDTO.title())

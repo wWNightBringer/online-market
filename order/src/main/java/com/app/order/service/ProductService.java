@@ -3,6 +3,7 @@ package com.app.order.service;
 import com.app.common.dto.ProductDTO;
 import com.app.order.domain.Product;
 import com.app.order.repository.ProductRepository;
+import com.app.order.util.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.app.order.util.mapper.OrderMapper.*;
+import static com.app.order.util.mapper.ProductMapper.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class ProductService {
 
     @Transactional
     public ProductDTO addProduct(ProductDTO productDTO) {
-        Product product = productRepository.save(createMap(productDTO));
+        Product product = productRepository.save(ProductMapper.mapProduct(productDTO));
         return mapProduct(product);
     }
 
@@ -40,5 +41,11 @@ public class ProductService {
     public List<ProductDTO> getAllProducts(Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(pageable);
         return pageMap(productPage);
+    }
+
+    @Transactional
+    public int takeProductCountToOrder(String title) {
+        Product product = productRepository.findProductByTitle(title);
+        return productRepository.takeProductCountToOrder(product.getCount(), product.getId());
     }
 }

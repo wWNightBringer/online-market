@@ -36,7 +36,7 @@ public class Order extends BaseModel {
     @Column(name = "total_cost")
     private BigDecimal totalCost;
     @Column(name = "product_count")
-    private int productCount;
+    private int count;
     @Column(name = "user_id")
     private int userId;
     @Enumerated(EnumType.STRING)
