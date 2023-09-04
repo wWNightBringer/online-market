@@ -20,6 +20,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 
 @Configuration
@@ -39,11 +41,11 @@ public class JobBatchConfig {
     public Step step(JobRepository jobRepository,
                      PlatformTransactionManager transactionManager,
                      ItemReader<JobDTO> itemReader,
-                     ItemProcessor<JobDTO, JobDTO> itemProcessor,
-                     ItemWriter<JobDTO> itemWriter) {
+                     ItemProcessor<JobDTO, Map<Integer, List<JobDTO.ProductCount>>> itemProcessor,
+                     ItemWriter<Map<Integer, List<JobDTO.ProductCount>>> itemWriter) {
 
         return new StepBuilder("Order step", jobRepository)
-            .<JobDTO, JobDTO>chunk(3, transactionManager)
+            .<JobDTO, Map<Integer, List<JobDTO.ProductCount>>>chunk(3, transactionManager)
             .reader(itemReader)
             .processor(itemProcessor)
             .writer(itemWriter)

@@ -1,9 +1,11 @@
 package com.app.order.job;
 
-import com.app.order.domain.Order;
-import com.app.order.domain.Product;
-
 import java.util.List;
+import java.util.Map;
 
-public record JobDTO(List<Order> orders, List<Product> products) {
+public record JobDTO(Map<Integer, List<ProductCount>> map) {
+
+    public record ProductCount(Integer productId, Integer orderCount, Integer finalCount) {
+
+    }
 }
