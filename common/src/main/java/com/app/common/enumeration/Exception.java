@@ -1,7 +1,8 @@
 package com.app.common.enumeration;
 
 public enum Exception {
-    USER_NOT_FOUND("User does not exist"), PASSWORD_INCORRECT("This password is not correct");
+    USER_NOT_FOUND("User does not exist"), PASSWORD_INCORRECT("This password is not correct"),
+    PRODUCT_NOT_FOUND("Product does not exist"), ORDER_NOT_FOUND("Order does not exist");
 
     private final String value;
 

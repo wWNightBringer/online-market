@@ -2,10 +2,16 @@ package com.app.order.service;
 
 import com.app.common.dto.OrderDTO;
 import com.app.common.dto.ProductDTO;
+import com.app.common.enumeration.Exception;
 import com.app.common.enumeration.State;
 import com.app.order.domain.Order;
 import com.app.order.domain.Product;
 import com.app.order.repository.OrderRepository;
+import com.app.common.enumeration.Exception;
+import com.app.order.domain.Order;
+import com.app.order.repository.OrderRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +35,12 @@ public class OrderService {
     public OrderDTO createOrder(ProductDTO productDTO) {
         Order order = orderRepository.save(mapOrder(productDTO));
         return getOrderDTO(order);
+    }
+
+    @Transactional(readOnly = true)
+    public Order getOrderById(Integer id) {
+        return orderRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Exception.ORDER_NOT_FOUND.getValue()));
     }
 
     private Order mapOrder(ProductDTO productDTO) {

@@ -1,9 +1,16 @@
 package com.app.order.service;
 
+import static com.app.order.util.mapper.OrderMapper.createMap;
+import static com.app.order.util.mapper.OrderMapper.map;
+import static com.app.order.util.mapper.OrderMapper.pageMap;
+
+import com.app.common.dto.CreateProductDTO;
 import com.app.common.dto.ProductDTO;
+import com.app.common.enumeration.Exception;
 import com.app.order.domain.Product;
 import com.app.order.repository.ProductRepository;
 import com.app.order.util.mapper.ProductMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +38,12 @@ public class ProductService {
         return mapProduct(productRepository.findProductByTitle(title));
     }
 
+    @Transactional(readOnly = true)
+    public Product getProductById(Integer id) {
+        return productRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(Exception.PRODUCT_NOT_FOUND.getValue()));
+    }
+
     @Transactional
     public void deleteProduct(String title) {
         Product product = productRepository.findProductByTitle(title);
@@ -41,11 +54,5 @@ public class ProductService {
     public List<ProductDTO> getAllProducts(Pageable pageable) {
         Page<Product> productPage = productRepository.findAll(pageable);
         return pageMap(productPage);
-    }
-
-    @Transactional
-    public int takeProductCountToOrder(String title) {
-        Product product = productRepository.findProductByTitle(title);
-        return productRepository.takeProductCountToOrder(product.getCount(), product.getId());
     }
 }
