@@ -1,9 +1,8 @@
-package com.app.common.security;
+package com.app.common.config.security;
 
 import static com.app.common.enumeration.SystemEnum.EMAIL_PARAM;
 import static com.app.common.enumeration.SystemEnum.NAME_PARAM;
 import static com.app.common.enumeration.SystemEnum.ROLE_PARAM;
-import static com.app.common.security.SecurityUtils.JWT_ALGORITHM;
 
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -35,7 +34,7 @@ public class JwtTokenUtils {
             .expiresAt(expiredTime.toInstant(ZoneOffset.UTC))
             .build();
 
-        JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();
+        JwsHeader jwsHeader = JwsHeader.with(SecurityUtils.JWT_ALGORITHM).build();
 
         JwtEncoderParameters parameters = JwtEncoderParameters.from(jwsHeader, jwtClaims);
 

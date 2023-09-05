@@ -1,9 +1,10 @@
 package com.app.common.security;
 
-import static com.app.common.security.SecurityUtils.JWT_ALGORITHM;
+import static com.app.common.config.security.SecurityUtils.JWT_ALGORITHM;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.app.common.config.security.SecurityJwtUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

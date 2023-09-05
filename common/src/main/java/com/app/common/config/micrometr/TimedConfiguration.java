@@ -1,4 +1,4 @@
-package com.app.common.micrometr;
+package com.app.common.config.micrometr;
 
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;

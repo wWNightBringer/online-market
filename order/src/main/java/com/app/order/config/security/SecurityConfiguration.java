@@ -1,7 +1,7 @@
 package com.app.order.config.security;
 
 import com.app.common.enumeration.Role;
-import com.app.common.security.CommonLogoutSuccessHandler;
+import com.app.common.config.security.CommonLogoutSuccessHandler;
 import com.app.order.config.SecurityConfigProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

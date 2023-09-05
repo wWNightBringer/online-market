@@ -1,11 +1,11 @@
 package com.app.user.config.security;
 
-import static com.app.common.security.JwtTokenUtils.getToken;
-import static com.app.common.security.JwtTokenUtils.hasAuthorizationBearer;
+import static com.app.common.config.security.JwtTokenUtils.getToken;
+import static com.app.common.config.security.JwtTokenUtils.hasAuthorizationBearer;
 
 import com.app.common.enumeration.Role;
 import com.app.common.enumeration.SystemEnum;
-import com.app.common.security.SecurityJwtUtils;
+import com.app.common.config.security.SecurityJwtUtils;
 import com.app.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

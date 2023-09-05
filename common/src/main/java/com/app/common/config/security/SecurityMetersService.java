@@ -1,4 +1,4 @@
-package com.app.common.security;
+package com.app.common.config.security;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;

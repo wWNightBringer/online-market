@@ -7,7 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import com.app.common.enumeration.Role;
-import com.app.common.security.JwtTokenUtils;
+import com.app.common.config.security.JwtTokenUtils;
 import com.app.user.domain.User;
 import com.app.user.service.UserService;
 import jakarta.servlet.ServletException;

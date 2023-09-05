@@ -1,4 +1,4 @@
-package com.app.common.security;
+package com.app.common.config.security;
 
 /**
  * Application constants.

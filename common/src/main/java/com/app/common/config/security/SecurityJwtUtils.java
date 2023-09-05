@@ -1,4 +1,4 @@
-package com.app.common.security;
+package com.app.common.config.security;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;

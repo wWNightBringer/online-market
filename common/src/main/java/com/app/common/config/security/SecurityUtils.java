@@ -1,4 +1,4 @@
-package com.app.common.security;
+package com.app.common.config.security;
 
 import com.app.common.enumeration.Role;
 import org.springframework.security.core.Authentication;
