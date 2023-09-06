@@ -9,7 +9,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(SecurityConfigProperties.class)
 @SpringBootApplication(
     exclude = {UserDetailsServiceAutoConfiguration.class},
-    scanBasePackages = {"com.app.order", "com.app.common.handler", "com.app.common.micrometr"})
+    scanBasePackages = {
+        "com.app.order",
+        "com.app.common.handler",
+        "com.app.common.micrometr",
+        "com.app.common.config.kafka.producer"})
 public class OrderApplication {
 
     public static void main(String[] args) {

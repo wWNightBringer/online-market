@@ -1,6 +1,8 @@
 server:
   port: 9002
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092
   batch:
     job:
       enabled: false
