@@ -9,19 +9,25 @@ import java.util.UUID;
 
 public class ProductMapper {
 
-    private ProductMapper(){}
+    private ProductMapper() {
+    }
 
     public static ProductDTO mapProduct(Product product) {
         return new ProductDTO(
             product.getTitle(),
             product.getGroup(),
             product.getBrand(),
-            product.getPrice(),
-            product.getCount());
+            product.getPrice());
     }
 
     public static List<ProductDTO> pageMap(Page<Product> products) {
         return products.getContent().stream()
+            .map(ProductMapper::mapProduct)
+            .toList();
+    }
+
+    public static List<ProductDTO> listMap(List<Product> products) {
+        return products.stream()
             .map(ProductMapper::mapProduct)
             .toList();
     }
@@ -33,7 +39,6 @@ public class ProductMapper {
             .group(productDTO.group())
             .brand(productDTO.brand())
             .price(productDTO.price())
-            .count(productDTO.count())
             .build();
     }
 }

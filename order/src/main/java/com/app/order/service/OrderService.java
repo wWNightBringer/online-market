@@ -1,40 +1,45 @@
 package com.app.order.service;
 
+import com.app.common.dto.CreateOrderDTO;
 import com.app.common.dto.OrderDTO;
-import com.app.common.dto.ProductDTO;
 import com.app.common.enumeration.Exception;
 import com.app.common.enumeration.State;
 import com.app.order.domain.Order;
 import com.app.order.domain.Product;
+import com.app.order.domain.ProductOrder;
 import com.app.order.repository.OrderRepository;
-import com.app.common.enumeration.Exception;
-import com.app.order.domain.Order;
-import com.app.order.repository.OrderRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.app.order.repository.ProductOrderRepository;
+import com.app.order.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.Map;
 
-import static com.app.order.util.mapper.ProductMapper.mapProduct;
+import static com.app.order.util.mapper.OrderMapper.*;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final ProductService productService;
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+    private final ProductOrderRepository productOrderRepository;
 
     @Transactional
-    public OrderDTO createOrder(ProductDTO productDTO) {
-        Order order = orderRepository.save(mapOrder(productDTO));
+    public OrderDTO createOrder(List<CreateOrderDTO.ProductIdsDTO> productIds) {
+        Order order = orderRepository.save(mapOrder(productIds));
+        List<ProductOrder> productOrders = productOrderRepository.findAllByProductOrderKey_OrderId(order.getId());
+        updateProductOrders(productOrders, productIds);
         return getOrderDTO(order);
+    }
+
+    public List<OrderDTO> getAllOrdersByState(State state) {
+        return mapList(orderRepository.findAllByStateIs(state));
     }
 
     @Transactional(readOnly = true)
@@ -43,37 +48,21 @@ public class OrderService {
             .orElseThrow(() -> new EntityNotFoundException(Exception.ORDER_NOT_FOUND.getValue()));
     }
 
-    private Order mapOrder(ProductDTO productDTO) {
-        return Order.builder()
-            .uuid(UUID.randomUUID().toString())
-            .orderNumber(BigDecimal.valueOf(new Random().nextDouble()))
-            .deliveryDate(LocalDateTime.now().plusDays(7))
-//            .totalCost(getTotalPrice(List.of(mapProduct(productDTO))))
-//            .count(productService.takeProductCountToOrder(productDTO.title()))
-            .products(List.of(mapProduct(productDTO)))
-            .userId(7)
-            .state(State.PENDING)
-            .build();
+    private void updateProductOrders(List<ProductOrder> productOrders, List<CreateOrderDTO.ProductIdsDTO> productIds) {
+        Map<Integer, ProductOrder> map = new HashMap<>();
+        productOrders.forEach(productOrder -> map.put(productOrder.getProductOrderKey().getProduct().getId(), productOrder));
+
+        productIds.forEach(p -> {
+            ProductOrder productOrder = map.get(p.productId());
+            productOrder.setProductCount(p.count());
+            productOrderRepository.save(productOrder);
+        });
     }
 
-    private OrderDTO getOrderDTO(Order order) {
-        return new OrderDTO(
-            order.getOrderNumber(),
-            order.getDeliveryDate(),
-            order.getTotalCost(),
-            order.getCount(),
-            order.getUserId(),
-            order.getState()
-        );
-    }
-
-    private BigDecimal getTotalPrice(List<Product> products) {
-        BigDecimal totalPrice = BigDecimal.ZERO;
-        for (Product product : products) {
-            if (product != null) {
-                totalPrice = totalPrice.add(product.getPrice());
-            }
-        }
-        return totalPrice;
+    private List<Product> getProductsToOrder(List<CreateOrderDTO.ProductIdsDTO> productIdsDTOS) {
+        List<Integer> productIds = productIdsDTOS.stream()
+            .map(CreateOrderDTO.ProductIdsDTO::productId)
+            .toList();
+        return
     }
 }

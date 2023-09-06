@@ -1,10 +1,5 @@
 package com.app.order.service;
 
-import static com.app.order.util.mapper.OrderMapper.createMap;
-import static com.app.order.util.mapper.OrderMapper.map;
-import static com.app.order.util.mapper.OrderMapper.pageMap;
-
-import com.app.common.dto.CreateProductDTO;
 import com.app.common.dto.ProductDTO;
 import com.app.common.enumeration.Exception;
 import com.app.order.domain.Product;
@@ -19,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.app.order.util.mapper.ProductMapper.*;
+import static com.app.order.util.mapper.ProductMapper.mapProduct;
+import static com.app.order.util.mapper.ProductMapper.pageMap;
 
 @Service
 @RequiredArgsConstructor

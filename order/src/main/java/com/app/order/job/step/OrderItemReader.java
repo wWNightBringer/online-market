@@ -22,6 +22,7 @@ public class OrderItemReader implements ItemReader<JobDTO> {
     private static final Logger log = LoggerFactory.getLogger(OrderItemReader.class);
 
     private final OrderRepository orderRepository;
+
     private boolean batchJobState = true;
 
     @Transactional(readOnly = true)
@@ -50,11 +51,11 @@ public class OrderItemReader implements ItemReader<JobDTO> {
     }
 
     private List<JobDTO.ProductCount> buildProductCount(Order order) {
-        return order.getProductOrders()
+        return order.getProducts()
             .stream()
             .map(productOrder -> new JobDTO.ProductCount(
-                productOrder.getProductOrderKey().getProduct().getId(),
-                productOrder.getProductCount(),
+                null,
+                null,
                 null))
             .toList();
     }

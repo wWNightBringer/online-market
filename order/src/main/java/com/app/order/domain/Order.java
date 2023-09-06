@@ -38,7 +38,7 @@ public class Order extends BaseModel {
     @Column(name = "total_cost")
     private BigDecimal totalCost;
     @Column(name = "product_count")
-    private int count;
+    private int totalCount;
     @Column(name = "user_id")
     private int userId;
     @Enumerated(EnumType.STRING)
@@ -55,6 +55,6 @@ public class Order extends BaseModel {
     private List<Product> products;
 
     @JoinColumn(name = "order_id")
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     private List<ProductOrder> productOrders;
 }

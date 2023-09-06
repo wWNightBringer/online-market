@@ -1,8 +1,12 @@
 package com.app.common.dto;
 
-import com.app.common.enumeration.State;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-public record CreateOrderDTO(BigDecimal orderNumber, BigDecimal totalCost, int count, int userId, State state) {
+public record CreateOrderDTO(@JsonProperty(value = "productIds") List<ProductIdsDTO> productIdsDTOS) {
+
+    public record ProductIdsDTO(Integer productId, Integer count, BigDecimal price) {
+    }
 }
