@@ -7,6 +7,8 @@ import java.util.List;
 
 public class OrderUtil {
 
+    private OrderUtil(){}
+
     public static int getTotalCount(List<CreateOrderDTO.ProductIdsDTO> productIds) {
         return productIds.stream()
             .mapToInt(CreateOrderDTO.ProductIdsDTO::count).sum();

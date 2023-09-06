@@ -15,11 +15,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.*;
 
+import static com.app.order.util.OrderUtil.getTotalCount;
+import static com.app.order.util.OrderUtil.getTotalPrice;
 import static com.app.order.util.mapper.OrderMapper.*;
 
 @Service
@@ -32,7 +33,7 @@ public class OrderService {
 
     @Transactional
     public OrderDTO createOrder(List<CreateOrderDTO.ProductIdsDTO> productIds) {
-        Order order = orderRepository.save(mapOrder(productIds));
+        Order order = orderRepository.save(buildOrder(productIds));
         List<ProductOrder> productOrders = productOrderRepository.findAllByProductOrderKey_OrderId(order.getId());
         updateProductOrders(productOrders, productIds);
         return getOrderDTO(order);
@@ -59,10 +60,23 @@ public class OrderService {
         });
     }
 
+    public Order buildOrder(List<CreateOrderDTO.ProductIdsDTO> productIds) {
+        return Order.builder()
+            .uuid(UUID.randomUUID().toString())
+            .orderNumber(BigDecimal.valueOf(new Random().nextLong(100000, 10000000)))
+            .deliveryDate(LocalDateTime.now().plusDays(7))
+            .totalCost(getTotalPrice(productIds))
+            .totalCount(getTotalCount(productIds))
+            .userId(7)
+            .products(getProductsToOrder(productIds))
+            .state(State.OPEN)
+            .build();
+    }
+
     private List<Product> getProductsToOrder(List<CreateOrderDTO.ProductIdsDTO> productIdsDTOS) {
         List<Integer> productIds = productIdsDTOS.stream()
             .map(CreateOrderDTO.ProductIdsDTO::productId)
             .toList();
-        return
+        return productRepository.findAllById(productIds);
     }
 }
