@@ -22,6 +22,7 @@ public class OrderItemReader implements ItemReader<JobDTO> {
     private static final Logger log = LoggerFactory.getLogger(OrderItemReader.class);
 
     private final OrderRepository orderRepository;
+
     private boolean batchJobState = true;
 
     @Transactional(readOnly = true)

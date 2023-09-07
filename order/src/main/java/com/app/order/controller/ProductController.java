@@ -1,7 +1,5 @@
 package com.app.order.controller;
 
-
-import com.app.common.dto.CreateProductDTO;
 import com.app.common.dto.ProductDTO;
 import com.app.common.dto.ResponsePage;
 import com.app.order.service.ProductService;
@@ -29,17 +27,17 @@ public class ProductController {
     @Timed(value = "create.products.time", description = "Create product time")
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ProductDTO addProduct(@RequestBody CreateProductDTO createProductDTO) {
-        return productService.addProduct(createProductDTO);
+    public ProductDTO addProduct(@RequestBody ProductDTO productDTO) {
+        return productService.addProduct(productDTO);
     }
 
     @Timed(value = "get.product.time", description = "Get product time after executions")
-    @GetMapping("/{title}")
+    @GetMapping("{title}")
     public ProductDTO getProductByTitle(@PathVariable(name = "title") String title) {
         return productService.getProductByTitle(title);
     }
 
-    @DeleteMapping("/{title}")
+    @DeleteMapping("{title}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteProduct(@PathVariable(name = "title") String title) {
         productService.deleteProduct(title);

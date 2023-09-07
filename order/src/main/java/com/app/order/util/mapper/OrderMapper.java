@@ -1,42 +1,49 @@
 package com.app.order.util.mapper;
 
-import com.app.common.dto.CreateProductDTO;
-import com.app.common.dto.ProductDTO;
+import com.app.common.dto.CreateOrderDTO;
+import com.app.common.dto.OrderDTO;
+import com.app.common.enumeration.State;
+import com.app.order.domain.Order;
 import com.app.order.domain.Product;
-import org.springframework.data.domain.Page;
 
-import java.util.List;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.*;
+
+import static com.app.order.util.OrderUtil.calculateTotalCost;
+import static com.app.order.util.OrderUtil.getTotalCount;
 
 public class OrderMapper {
 
-    private OrderMapper() {
+    private OrderMapper(){}
+
+    public static Order buildOrder(List<CreateOrderDTO.ProductIdsDTO> productIds, List<Product> products, Integer userId) {
+        return Order.builder()
+            .uuid(UUID.randomUUID().toString())
+            .orderNumber(BigDecimal.valueOf(new Random().nextLong(100000, 10000000)))
+            .deliveryDate(LocalDateTime.now().plusDays(7))
+            .totalCost(calculateTotalCost(productIds))
+            .totalCount(getTotalCount(productIds))
+            .userId(userId)
+            .products(products)
+            .state(State.OPEN)
+            .build();
     }
 
-    public static ProductDTO map(Product product) {
-        return new ProductDTO(
-            product.getTitle(),
-            product.getGroup(),
-            product.getBrand(),
-            product.getPrice(),
-            product.getCount());
-    }
-
-
-    public static List<ProductDTO> pageMap(Page<Product> products) {
-        return products.getContent().stream()
-            .map(OrderMapper::map)
+    public static List<OrderDTO> mapList(List<Order> orders) {
+        return orders.stream()
+            .map(OrderMapper::getOrderDTO)
             .toList();
     }
 
-    public static Product createMap(CreateProductDTO createProductDTO) {
-        return Product.builder()
-            .uuid(UUID.randomUUID().toString())
-            .title(createProductDTO.title())
-            .group(createProductDTO.group())
-            .brand(createProductDTO.brand())
-            .price(createProductDTO.price())
-            .count(createProductDTO.count())
-            .build();
+    public static OrderDTO getOrderDTO(Order order) {
+        return new OrderDTO(
+            order.getOrderNumber(),
+            order.getDeliveryDate(),
+            order.getTotalCost(),
+            order.getTotalCount(),
+            order.getState(),
+            ProductMapper.listMap(order.getProducts())
+        );
     }
 }

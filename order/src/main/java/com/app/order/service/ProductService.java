@@ -1,14 +1,10 @@
 package com.app.order.service;
 
-import static com.app.order.util.mapper.OrderMapper.createMap;
-import static com.app.order.util.mapper.OrderMapper.map;
-import static com.app.order.util.mapper.OrderMapper.pageMap;
-
-import com.app.common.dto.CreateProductDTO;
 import com.app.common.dto.ProductDTO;
 import com.app.common.enumeration.Exception;
 import com.app.order.domain.Product;
 import com.app.order.repository.ProductRepository;
+import com.app.order.util.mapper.ProductMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.app.order.util.mapper.ProductMapper.mapProduct;
+import static com.app.order.util.mapper.ProductMapper.pageMap;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -25,14 +24,14 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public ProductDTO addProduct(CreateProductDTO createProductDTO) {
-        Product product = productRepository.save(createMap(createProductDTO));
-        return map(product);
+    public ProductDTO addProduct(ProductDTO productDTO) {
+        Product product = productRepository.save(ProductMapper.mapProduct(productDTO));
+        return mapProduct(product);
     }
 
     @Transactional(readOnly = true)
     public ProductDTO getProductByTitle(String title) {
-        return map(productRepository.findProductByTitle(title));
+        return mapProduct(productRepository.findProductByTitle(title));
     }
 
     @Transactional(readOnly = true)
