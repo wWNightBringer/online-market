@@ -31,7 +31,7 @@ public class OrderController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/{state}")
+    @GetMapping("{state}")
     public List<OrderDTO> getAllOrdersByState(@PathVariable(name = "state") State state) {
         return orderService.getAllOrdersByState(state);
     }

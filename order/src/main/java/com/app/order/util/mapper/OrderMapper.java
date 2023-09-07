@@ -42,7 +42,6 @@ public class OrderMapper {
             order.getDeliveryDate(),
             order.getTotalCost(),
             order.getTotalCount(),
-            order.getUserId(),
             order.getState(),
             ProductMapper.listMap(order.getProducts())
         );

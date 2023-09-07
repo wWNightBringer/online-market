@@ -51,11 +51,11 @@ public class OrderItemReader implements ItemReader<JobDTO> {
     }
 
     private List<JobDTO.ProductCount> buildProductCount(Order order) {
-        return order.getProducts()
+        return order.getProductOrders()
             .stream()
             .map(productOrder -> new JobDTO.ProductCount(
-                null,
-                null,
+                productOrder.getProductOrderKey().getProduct().getId(),
+                productOrder.getProductCount(),
                 null))
             .toList();
     }

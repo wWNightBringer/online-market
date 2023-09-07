@@ -6,5 +6,5 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record OrderDTO(BigDecimal orderNumber, LocalDateTime deliveryDate, BigDecimal totalCost, int totalCount, int userId, State state, List<ProductDTO> productDTOS) {
+public record OrderDTO(BigDecimal orderNumber, LocalDateTime deliveryDate, BigDecimal totalCost, int totalCount, State state, List<ProductDTO> productDTOS) {
 }
