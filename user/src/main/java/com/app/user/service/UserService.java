@@ -1,7 +1,5 @@
 package com.app.user.service;
 
-import static com.app.user.util.mapper.UserMapper.USER_MAPPER;
-
 import com.app.common.dto.UserDTO;
 import com.app.common.dto.UserRegistrationDTO;
 import com.app.common.enumeration.Exception;
@@ -11,6 +9,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.app.user.util.mapper.UserMapper.USER_MAPPER;
 
 @Service
 @RequiredArgsConstructor
@@ -38,9 +38,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserDTO getUserIdById(int id) {
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(Exception.USER_NOT_FOUND.name()));
-        return USER_MAPPER.map(user);
+    public Integer getUserIdByEmail(String email) {
+        return getUser(email).getId();
     }
 }

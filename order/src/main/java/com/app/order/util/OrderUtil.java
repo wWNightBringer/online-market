@@ -11,10 +11,11 @@ public class OrderUtil {
 
     public static int getTotalCount(List<CreateOrderDTO.ProductIdsDTO> productIds) {
         return productIds.stream()
-            .mapToInt(CreateOrderDTO.ProductIdsDTO::count).sum();
+            .mapToInt(CreateOrderDTO.ProductIdsDTO::count)
+            .sum();
     }
 
-    public static BigDecimal getTotalPrice(List<CreateOrderDTO.ProductIdsDTO> productIds) {
+    public static BigDecimal calculateTotalCost(List<CreateOrderDTO.ProductIdsDTO> productIds) {
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (CreateOrderDTO.ProductIdsDTO productId : productIds) {
             totalPrice = totalPrice.add(new BigDecimal(productId.count()).multiply(productId.price()));

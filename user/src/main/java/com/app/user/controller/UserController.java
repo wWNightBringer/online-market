@@ -1,22 +1,16 @@
 package com.app.user.controller;
 
-import static com.app.user.util.mapper.UserMapper.USER_MAPPER;
-
 import com.app.common.dto.UserDTO;
 import com.app.common.dto.UserRegistrationDTO;
 import com.app.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+
+import static com.app.user.util.mapper.UserMapper.USER_MAPPER;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -41,8 +35,8 @@ public class UserController {
         return USER_MAPPER.map(userService.getUser(email));
     }
 
-    @GetMapping("{id}")
-    public UserDTO getUserId(@PathVariable("id") int id) {
-        return userService.getUserIdById(id);
+    @GetMapping("id/{email}")
+    public Integer getUserIdByEmail(@PathVariable(name = "email") String email) {
+        return userService.getUserIdByEmail(email);
     }
 }

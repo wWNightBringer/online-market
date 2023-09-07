@@ -21,8 +21,7 @@ import java.util.List;
 @NamedEntityGraph(
     name = Order.ORDER_ENTITY_GRAPH_NAME,
     attributeNodes = {
-        @NamedAttributeNode("productOrders"),
-        @NamedAttributeNode("products")})
+        @NamedAttributeNode("productOrders")})
 public class Order extends BaseModel {
 
     public static final String ORDER_ENTITY_GRAPH_NAME = "getAllOrder";
