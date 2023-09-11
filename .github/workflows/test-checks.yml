@@ -1,5 +1,10 @@
 name: Test Checks
 
+on:
+  push:
+    branches:
+      - "*"
+
 jobs:
     run-all-test:
         runs-on: self-hosted
