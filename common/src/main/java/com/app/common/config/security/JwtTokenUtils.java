@@ -1,9 +1,5 @@
 package com.app.common.config.security;
 
-import static com.app.common.enumeration.SystemEnum.EMAIL_PARAM;
-import static com.app.common.enumeration.SystemEnum.NAME_PARAM;
-import static com.app.common.enumeration.SystemEnum.ROLE_PARAM;
-
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -14,6 +10,8 @@ import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.app.common.enumeration.SystemEnum.*;
 
 public class JwtTokenUtils {
 

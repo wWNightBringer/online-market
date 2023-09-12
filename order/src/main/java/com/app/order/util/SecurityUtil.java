@@ -5,8 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUtil {
 
-    private SecurityUtil() {
-    }
+    private SecurityUtil() {}
 
     public static String getUserEmail() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
