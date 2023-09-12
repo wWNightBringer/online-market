@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import static com.app.order.util.SecurityUtil.getUserEmail;
-import static com.app.order.util.mapper.OrderMapper.*;
+import static com.app.order.util.mapper.OrderMapper.buildOrder;
+import static com.app.order.util.mapper.OrderMapper.getOrderDTO;
+import static com.app.order.util.mapper.OrderMapper.mapList;
 
 @Service
 @RequiredArgsConstructor

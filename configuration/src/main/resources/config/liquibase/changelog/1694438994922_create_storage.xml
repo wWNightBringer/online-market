@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet id="create_storage" author="Andrew">
+        <createTable tableName="storages">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="address" type="varchar(100)"/>
+            <column name="city" type="varchar(50)"/>
+            <column name="create_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_deleted" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="product_storage">
+            <column name="product_id" type="INT"/>
+            <column name="storage_id" type="INT"/>
+        </createTable>
+
+        <addUniqueConstraint constraintName="unique_product_storage"
+                             tableName="product_storage"
+                             columnNames="product_id, storage_id"/>
+
+    </changeSet>
+</databaseChangeLog>
+

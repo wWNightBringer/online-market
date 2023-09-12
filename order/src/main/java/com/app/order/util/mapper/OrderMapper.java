@@ -8,14 +8,17 @@ import com.app.order.domain.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 import static com.app.order.util.OrderUtil.calculateTotalCost;
 import static com.app.order.util.OrderUtil.getTotalCount;
 
 public class OrderMapper {
 
-    private OrderMapper(){}
+    private OrderMapper() {
+    }
 
     public static Order buildOrder(List<CreateOrderDTO.ProductIdsDTO> productIds, List<Product> products, Integer userId) {
         return Order.builder()

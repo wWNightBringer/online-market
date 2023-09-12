@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.2'
+    id 'checkstyle'
     id 'io.spring.dependency-management' version '1.1.2'
 }
 
@@ -43,6 +44,11 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter"
     implementation "org.springframework.cloud:spring-cloud-starter-consul-all"
     implementation "org.springframework.cloud:spring-cloud-starter-gateway"
+}
+
+checkstyle {
+    toolVersion "10.12.1"
+    configFile = file("../config/checkstyle.xml")
 }
 
 dependencyManagement {

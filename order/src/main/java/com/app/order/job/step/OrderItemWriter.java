@@ -40,7 +40,7 @@ public class OrderItemWriter implements ItemWriter<Map<Integer, List<JobDTO.Prod
 
     private void updateOrder(Integer orderId) {
         Order order = orderService.getOrderById(orderId);
-        order.setState(State.PENDING);
+        order.setState(State.WAITING_FOR_PACKAGING);
         orderRepository.save(order);
     }
 
