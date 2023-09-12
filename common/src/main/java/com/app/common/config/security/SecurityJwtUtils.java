@@ -15,9 +15,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class SecurityJwtUtils {
 
-    private static final String JWT_KEY = """
-        NmE5OTNhYzAwNzc1MjVjZjM3MjQ2MjRlMTZmZGZhNzUyOThkYWZmZjBjMTQxMGI4MTkzYTU4MjM4ZjM0ODgyOWUwNjhjYmQyODFjYzc2NmRhOTQzMDc0NjQxMzhlZDQ1MGY0NjVlYWRmYjcyMDdiMzk2ODlhZDQyMDQwMjE4ZjY=
-        """;
+    private static final String JWT_KEY =
+        "NmE5OTNhYzAwNzc1MjVjZjM3MjQ2MjRlMTZmZGZhNzUyOThkYWZmZjBjMTQxMGI4MTkzYTU4MjM4ZjM0ODgyOWUwNjhjY" +
+            "mQyODFjYzc2NmRhOTQzMDc0NjQxMzhlZDQ1MGY0NjVlYWRmYjcyMDdiMzk2ODlhZDQyMDQwMjE4ZjY=";
 
     public Jwt decodeAccessToken(String token) {
         NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder
