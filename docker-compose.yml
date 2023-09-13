@@ -38,7 +38,7 @@ services:
     volumes:
       - ./prometheus/:/etc/prometheus/
     command:
-        - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--config.file=/etc/prometheus/prometheus.yml'
       # If you want to expose these ports outside your dev PC,
       # remove the "127.0.0.1:" prefix
     ports:
@@ -96,6 +96,32 @@ services:
       dockerfile: Dockerfile
     ports:
       - 9000:9000
+    restart: always
+    depends_on:
+      - consul
+      - postgresql
+      - prometheus
+      - kafka
+  order:
+    container_name: order-service
+    build:
+      context: ./order
+      dockerfile: Dockerfile
+    ports:
+      - 9002:9002
+    restart: always
+    depends_on:
+      - consul
+      - postgresql
+      - prometheus
+      - kafka
+  storage:
+    container_name: storage-service
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
+    ports:
+      - 9003:9003
     restart: always
     depends_on:
       - consul
