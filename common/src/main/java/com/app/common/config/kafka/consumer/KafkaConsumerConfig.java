@@ -16,14 +16,18 @@ import java.util.Map;
 @Configuration
 class KafkaConsumerConfig {
 
+    private static final String ORDER_GROUP_ID = "order";
+
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
     @Bean
     public Map<String, Object> consumerConfigs() {
         return Map.of(
+            ConsumerConfig.GROUP_ID_CONFIG, ORDER_GROUP_ID,
             ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers,
-            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class
+            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
+            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class
         );
     }
 

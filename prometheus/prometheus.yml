@@ -26,4 +26,4 @@ scrape_configs:
     # password: admin
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ['host.docker.internal:9002']
+      - targets: [ 'host.docker.internal:9002', 'host.docker.internal:9003' ]
