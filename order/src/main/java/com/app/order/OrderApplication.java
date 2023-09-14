@@ -14,7 +14,8 @@ import org.springframework.kafka.annotation.EnableKafka;
         "com.app.order",
         "com.app.common.handler",
         "com.app.common.micrometr",
-        "com.app.common.config.kafka.producer"})
+        "com.app.common.config.kafka.producer",
+        "com.app.common.config.kafka.topic"})
 @EnableKafka
 public class OrderApplication {
 

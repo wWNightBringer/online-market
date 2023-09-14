@@ -11,11 +11,15 @@ import com.app.order.domain.ProductOrder;
 import com.app.order.repository.OrderRepository;
 import com.app.order.repository.ProductOrderRepository;
 import com.app.order.repository.ProductRepository;
+import com.app.order.service.producer.ProductProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +37,8 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ProductOrderRepository productOrderRepository;
     private final UserClient userClient;
+    private final ProductProducer productProducer;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public OrderDTO createOrder(List<CreateOrderDTO.ProductIdsDTO> productIds, String token) {
@@ -56,6 +62,13 @@ public class OrderService {
     public Order getOrderById(Integer id) {
         return orderRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(Exception.ORDER_NOT_FOUND.getValue()));
+    }
+
+    public OrderDTO updateProductByDeliveryAddress(String address, Integer orderId) throws JsonProcessingException {
+        List<Integer> productIds = new ArrayList<>();
+        String message = objectMapper.writeValueAsString(productIds);
+        productProducer.sendMessageToStorage(message);
+        return null;
     }
 
     private void updateProductOrders(List<ProductOrder> productOrders, List<CreateOrderDTO.ProductIdsDTO> productIds) {
