@@ -2,6 +2,7 @@ package com.app.order.service;
 
 import com.app.common.dto.CreateOrderDTO;
 import com.app.common.dto.OrderDTO;
+import com.app.common.enumeration.City;
 import com.app.common.enumeration.Exception;
 import com.app.common.enumeration.State;
 import com.app.order.client.UserClient;
@@ -11,11 +12,13 @@ import com.app.order.domain.ProductOrder;
 import com.app.order.repository.OrderRepository;
 import com.app.order.repository.ProductOrderRepository;
 import com.app.order.repository.ProductRepository;
+import com.app.order.util.OrderUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +59,17 @@ public class OrderService {
     public Order getOrderById(Integer id) {
         return orderRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(Exception.ORDER_NOT_FOUND.getValue()));
+    }
+
+    @Transactional(readOnly = true)
+    public LocalDateTime getDeliveryDate(Integer orderId, City deliveryCity) {
+        Order order = getOrderById(orderId);
+
+        List<String> mockCity = List.of(
+            City.DNIPRO.getValue(),
+            City.LVIV.getValue());
+
+        return OrderUtil.calculateDeliveryDateByAddress(mockCity, deliveryCity.getValue(), order.getDeliveryDate());
     }
 
     private void updateProductOrders(List<ProductOrder> productOrders, List<CreateOrderDTO.ProductIdsDTO> productIds) {
