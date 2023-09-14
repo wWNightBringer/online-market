@@ -25,7 +25,6 @@ public class StorageService {
         return StorageMapper.mapPage(storagesPage);
     }
 
-
     @KafkaListener(topics = "order_topic", groupId = "order")
     @Transactional(readOnly = true)
     public List<StorageDTO> getStoragesByProductIds(List<Integer> productIds) {

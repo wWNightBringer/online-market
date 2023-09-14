@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authz ->
                     // prettier-ignore
                     authz
-                        .requestMatchers("/h2-console/**", "/error/**").permitAll()
+                        .requestMatchers("/h2-console/**", "/error/**", "**/api-docs/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/management/health").permitAll()
                         .requestMatchers("/management/health/**").permitAll()

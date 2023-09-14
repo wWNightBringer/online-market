@@ -2,6 +2,7 @@ package com.app.order.service;
 
 import com.app.common.dto.CreateOrderDTO;
 import com.app.common.dto.OrderDTO;
+import com.app.common.enumeration.City;
 import com.app.common.enumeration.Exception;
 import com.app.common.enumeration.State;
 import com.app.order.client.UserClient;
@@ -14,12 +15,13 @@ import com.app.order.repository.ProductRepository;
 import com.app.order.service.producer.ProductProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.app.order.util.OrderUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,11 +66,15 @@ public class OrderService {
             .orElseThrow(() -> new EntityNotFoundException(Exception.ORDER_NOT_FOUND.getValue()));
     }
 
-    public OrderDTO updateProductByDeliveryAddress(String address, Integer orderId) throws JsonProcessingException {
-        List<Integer> productIds = new ArrayList<>();
-        String message = objectMapper.writeValueAsString(productIds);
-        productProducer.sendMessageToStorage(message);
-        return null;
+    @Transactional(readOnly = true)
+    public LocalDateTime getDeliveryDate(Integer orderId, City deliveryCity) {
+        Order order = getOrderById(orderId);
+
+        List<String> mockCity = List.of(
+            City.DNIPRO.getValue(),
+            City.LVIV.getValue());
+
+        return OrderUtil.calculateDeliveryDateByAddress(mockCity, deliveryCity.getValue(), order.getDeliveryDate());
     }
 
     private void updateProductOrders(List<ProductOrder> productOrders, List<CreateOrderDTO.ProductIdsDTO> productIds) {
