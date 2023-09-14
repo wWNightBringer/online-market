@@ -15,5 +15,5 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
         LEFT JOIN ProductStorage ps ON storage.id=ps.productStorageKey.storageId
         WHERE ps.productStorageKey.productId in :productIds
         """)
-    List<Storage> findStoragesByProductIds(@Param("productIds") List<Integer> productIds);
+    List<Storage> findStoragesByProductIds(@Param("productIds") Integer[] productIds);
 }
