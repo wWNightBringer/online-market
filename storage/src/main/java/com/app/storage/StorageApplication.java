@@ -15,6 +15,7 @@ import org.springframework.kafka.annotation.EnableKafka;
         "com.app.storage",
         "com.app.common.handler",
         "com.app.common.micrometr",
+        "com.app.common.config.kafka.topic",
         "com.app.common.config.kafka.consumer"})
 public class StorageApplication {
 

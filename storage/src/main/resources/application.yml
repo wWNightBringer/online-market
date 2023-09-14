@@ -2,7 +2,7 @@ server:
   port: 9003
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: localhost:29092
   batch:
     job:
       enabled: false
@@ -71,5 +71,4 @@ management:
             enabled: true
 security:
   enabled: ${SECURITY_ENABLED:false}
-
 

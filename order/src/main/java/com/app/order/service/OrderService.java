@@ -13,11 +13,11 @@ import com.app.order.repository.OrderRepository;
 import com.app.order.repository.ProductOrderRepository;
 import com.app.order.repository.ProductRepository;
 import com.app.order.service.producer.ProductProducer;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.app.order.util.OrderUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +33,7 @@ import static com.app.order.util.mapper.OrderMapper.mapList;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class OrderService implements CommandLineRunner {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
@@ -70,11 +70,9 @@ public class OrderService {
     public LocalDateTime getDeliveryDate(Integer orderId, City deliveryCity) {
         Order order = getOrderById(orderId);
 
-        List<String> mockCity = List.of(
-            City.DNIPRO.getValue(),
-            City.LVIV.getValue());
+        productProducer.sendMessageToStorage("order_topic");
 
-        return OrderUtil.calculateDeliveryDateByAddress(mockCity, deliveryCity.getValue(), order.getDeliveryDate());
+        return OrderUtil.calculateDeliveryDateByAddress(null, deliveryCity.getValue(), order.getDeliveryDate());
     }
 
     private void updateProductOrders(List<ProductOrder> productOrders, List<CreateOrderDTO.ProductIdsDTO> productIds) {
@@ -93,5 +91,10 @@ public class OrderService {
             .map(CreateOrderDTO.ProductIdsDTO::productId)
             .toList();
         return productRepository.findAllById(ids);
+    }
+
+    @Override
+    public void run(String... args) throws java.lang.Exception {
+        getDeliveryDate(27, City.DNIPRO);
     }
 }
