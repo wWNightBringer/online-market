@@ -12,8 +12,6 @@ import org.springframework.kafka.annotation.EnableKafka;
 @SpringBootApplication(
     exclude = {UserDetailsServiceAutoConfiguration.class},
     scanBasePackages = {
-        "com.app.common.config.kafka.topic",
-        "com.app.common.config.kafka.consumer",
         "com.app.storage",
         "com.app.common.handler",
         "com.app.common.micrometr"

@@ -32,6 +32,8 @@ public class SecurityConfiguration {
                     // prettier-ignore
                     authz
                         .requestMatchers("/h2-console/**", "/error/**", "**/api-docs/**").permitAll()
+                        //Temporary solution, will be removed in the future
+                        .requestMatchers("api/v1/storages/productIds").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/management/health").permitAll()
                         .requestMatchers("/management/health/**").permitAll()
