@@ -10,6 +10,8 @@ import com.app.order.repository.ProductRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
@@ -36,6 +38,10 @@ class OrderServiceTest {
 
     @MockBean
     private OrderRepository orderRepository;
+    @MockBean
+    private JobLauncher jobLauncher;
+    @MockBean(name = "orderJob")
+    private Job job;
 
     @Autowired
     private OrderService orderService;
