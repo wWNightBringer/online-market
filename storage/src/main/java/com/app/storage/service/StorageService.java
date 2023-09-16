@@ -7,7 +7,6 @@ import com.app.storage.util.mapper.StorageMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +24,6 @@ public class StorageService {
         return StorageMapper.mapPage(storagesPage);
     }
 
-
-    @KafkaListener(topics = "order_topic", groupId = "order")
     @Transactional(readOnly = true)
     public List<StorageDTO> getStoragesByProductIds(List<Integer> productIds) {
         List<Storage> storages = storageRepository.findStoragesByProductIds(productIds);

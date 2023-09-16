@@ -14,12 +14,11 @@ import org.springframework.kafka.annotation.EnableKafka;
     scanBasePackages = {
         "com.app.storage",
         "com.app.common.handler",
-        "com.app.common.micrometr",
-        "com.app.common.config.kafka.consumer"})
+        "com.app.common.micrometr"
+    })
 public class StorageApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(StorageApplication.class, args);
     }
-
 }

@@ -2,6 +2,7 @@ package com.app.order.service;
 
 import com.app.common.dto.CreateOrderDTO;
 import com.app.common.dto.OrderDTO;
+import com.app.common.enumeration.City;
 import com.app.common.enumeration.Exception;
 import com.app.common.enumeration.State;
 import com.app.order.client.UserClient;
@@ -11,11 +12,22 @@ import com.app.order.domain.ProductOrder;
 import com.app.order.repository.OrderRepository;
 import com.app.order.repository.ProductOrderRepository;
 import com.app.order.repository.ProductRepository;
+import com.app.order.util.OrderUtil;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +38,28 @@ import static com.app.order.util.mapper.OrderMapper.getOrderDTO;
 import static com.app.order.util.mapper.OrderMapper.mapList;
 
 @Service
-@RequiredArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final ProductOrderRepository productOrderRepository;
     private final UserClient userClient;
+    private final JobLauncher jobLauncher;
+    private final Job job;
+
+    public OrderService(OrderRepository orderRepository,
+                        ProductRepository productRepository,
+                        ProductOrderRepository productOrderRepository,
+                        UserClient userClient,
+                        JobLauncher jobLauncher,
+                        @Qualifier("orderJob") Job job) {
+        this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
+        this.productOrderRepository = productOrderRepository;
+        this.userClient = userClient;
+        this.jobLauncher = jobLauncher;
+        this.job = job;
+    }
 
     @Transactional
     public OrderDTO createOrder(List<CreateOrderDTO.ProductIdsDTO> productIds, String token) {
@@ -56,6 +83,33 @@ public class OrderService {
     public Order getOrderById(Integer id) {
         return orderRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(Exception.ORDER_NOT_FOUND.getValue()));
+    }
+
+    @Transactional(readOnly = true)
+    public LocalDateTime getDeliveryDate(Integer orderId, City deliveryCity) {
+        Order order = getOrderById(orderId);
+
+        List<String> mockCity = List.of(
+            City.DNIPRO.getValue(),
+            City.LVIV.getValue());
+
+        return OrderUtil.calculateDeliveryDateByAddress(mockCity, deliveryCity.getValue(), order.getDeliveryDate());
+    }
+
+    @Transactional
+    public void confirmOrder(Integer id) {
+        getOrderById(id);
+
+        JobParameters jobParameters = new JobParametersBuilder()
+            .addDate("currentDate", new Date())
+            .toJobParameters();
+
+        try {
+            jobLauncher.run(job, jobParameters);
+        } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException |
+                 JobParametersInvalidException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void updateProductOrders(List<ProductOrder> productOrders, List<CreateOrderDTO.ProductIdsDTO> productIds) {
