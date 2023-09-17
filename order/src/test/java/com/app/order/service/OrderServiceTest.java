@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {
@@ -68,14 +67,19 @@ class OrderServiceTest {
     }
 
     @Test
-    void finishOrderWithValidState(){
+    void confirmOrderWithValidState() {
         Integer orderId = 1;
 
-        Order order = buildOrder();
+        Order order = Order.builder()
+            .id(orderId)
+            .state(State.OPEN)
+            .build();
+        orderRepository.save(order);
+
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
         orderService.confirmOrder(orderId);
 
-        verify(orderRepository).changeOrderState(State.PENDING, orderId);
+        Assertions.assertEquals(State.PENDING, order.getState());
     }
 
     private Order buildOrder() {
@@ -83,7 +87,6 @@ class OrderServiceTest {
         order.setId(1);
         order.setDeliveryDate(LocalDateTime.now());
         order.setProducts(buildProducts());
-        order.setState(State.OPEN);
         return order;
     }
 
