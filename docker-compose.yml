@@ -69,6 +69,7 @@ services:
       - zookeeper
     ports:
       - 29092:29092
+    restart: always
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1

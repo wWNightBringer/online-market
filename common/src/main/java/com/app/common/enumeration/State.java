@@ -3,8 +3,13 @@ package com.app.common.enumeration;
 import com.app.common.exception.EnumNotFoundException;
 
 public enum State {
-    OPEN("Open"), PENDING("Pending"), WAITING_FOR_PACKAGING("Waiting for packaging"),
-    ON_THE_WAY("On the way"), READY("Ready"), CANCELLED("Cancelled"), REJECTED("Rejected");
+    OPEN("Open"),
+    PENDING("Pending"),
+    WAITING_FOR_PACKAGING("Waiting for packaging"),
+    ON_THE_WAY("On the way"),
+    READY("Ready"),
+    CANCELLED("Cancelled"),
+    REJECTED("Rejected");
 
     private final String value;
 

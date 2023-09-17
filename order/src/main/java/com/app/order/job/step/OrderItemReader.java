@@ -29,7 +29,7 @@ public class OrderItemReader implements ItemReader<JobDTO> {
     @Override
     public JobDTO read() {
         if (batchJobState) {
-            List<Order> orders = orderRepository.findAllByStateIs(State.OPEN);
+            List<Order> orders = orderRepository.findAllByStateIs(State.PENDING);
             if (orders.isEmpty()) {
                 return null;
             }

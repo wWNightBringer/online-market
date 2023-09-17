@@ -2,9 +2,12 @@ package com.app.order.service;
 
 import com.app.common.dto.CreateOrderDTO;
 import com.app.common.dto.OrderDTO;
+import com.app.common.dto.StorageDTO;
 import com.app.common.enumeration.City;
 import com.app.common.enumeration.Exception;
 import com.app.common.enumeration.State;
+import com.app.common.exception.InvalidStateException;
+import com.app.order.client.StorageClient;
 import com.app.order.client.UserClient;
 import com.app.order.domain.Order;
 import com.app.order.domain.Product;
@@ -12,35 +15,51 @@ import com.app.order.domain.ProductOrder;
 import com.app.order.repository.OrderRepository;
 import com.app.order.repository.ProductOrderRepository;
 import com.app.order.repository.ProductRepository;
-import com.app.order.service.producer.ProductProducer;
 import com.app.order.util.OrderUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.app.common.enumeration.State.PENDING;
 import static com.app.order.util.SecurityUtil.getUserEmail;
 import static com.app.order.util.mapper.OrderMapper.buildOrder;
 import static com.app.order.util.mapper.OrderMapper.getOrderDTO;
 import static com.app.order.util.mapper.OrderMapper.mapList;
 
 @Service
-@RequiredArgsConstructor
-public class OrderService implements CommandLineRunner {
+public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final ProductOrderRepository productOrderRepository;
     private final UserClient userClient;
-    private final ProductProducer productProducer;
-    private final ObjectMapper objectMapper;
+    private final StorageClient storageClient;
+    private final JobLauncher jobLauncher;
+    private final Job job;
+
+    public OrderService(OrderRepository orderRepository,
+                        ProductRepository productRepository,
+                        ProductOrderRepository productOrderRepository,
+                        UserClient userClient,
+                        StorageClient storageClient, JobLauncher jobLauncher,
+                        @Qualifier("orderJob") Job job) {
+        this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
+        this.productOrderRepository = productOrderRepository;
+        this.userClient = userClient;
+        this.storageClient = storageClient;
+        this.jobLauncher = jobLauncher;
+        this.job = job;
+    }
 
     @Transactional
     public OrderDTO createOrder(List<CreateOrderDTO.ProductIdsDTO> productIds, String token) {
@@ -53,6 +72,16 @@ public class OrderService implements CommandLineRunner {
         updateProductOrders(productOrders, productIds);
 
         return getOrderDTO(order);
+    }
+
+    @Transactional(readOnly = true)
+    public void confirmOrder(Integer orderId) {
+        Order order = getOrderById(orderId);
+        State state = PENDING;
+        if (!order.getState().equals(state)) {
+            orderRepository.changeOrderState(state, order.getId());
+        }
+        throw new InvalidStateException("your order is already on a pending");
     }
 
     public List<OrderDTO> getAllOrdersByState(State state) {
@@ -70,9 +99,17 @@ public class OrderService implements CommandLineRunner {
     public LocalDateTime getDeliveryDate(Integer orderId, City deliveryCity) {
         Order order = getOrderById(orderId);
 
-        productProducer.sendMessageToStorage("order_topic");
+        List<Integer> productIds = order.getProducts().stream()
+            .map(Product::getId)
+            .toList();
 
-        return OrderUtil.calculateDeliveryDateByAddress(null, deliveryCity.getValue(), order.getDeliveryDate());
+        StorageDTO[] storages = storageClient.getStoragesByProductIds(productIds);
+
+        List<String> storageCities = Arrays.stream(storages)
+            .map(StorageDTO::city)
+            .toList();
+
+        return OrderUtil.calculateDeliveryDateByAddress(storageCities, deliveryCity.getValue(), order.getDeliveryDate());
     }
 
     private void updateProductOrders(List<ProductOrder> productOrders, List<CreateOrderDTO.ProductIdsDTO> productIds) {
@@ -91,10 +128,5 @@ public class OrderService implements CommandLineRunner {
             .map(CreateOrderDTO.ProductIdsDTO::productId)
             .toList();
         return productRepository.findAllById(ids);
-    }
-
-    @Override
-    public void run(String... args) throws java.lang.Exception {
-        getDeliveryDate(27, City.DNIPRO);
     }
 }

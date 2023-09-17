@@ -13,9 +13,7 @@ import org.springframework.kafka.annotation.EnableKafka;
     scanBasePackages = {
         "com.app.order",
         "com.app.common.handler",
-        "com.app.common.micrometr",
-        "com.app.common.config.kafka.producer",
-        "com.app.common.config.kafka.topic"})
+        "com.app.common.micrometr"})
 @EnableKafka
 public class OrderApplication {
 

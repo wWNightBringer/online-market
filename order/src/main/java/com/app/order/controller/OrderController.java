@@ -40,4 +40,9 @@ public class OrderController {
     public List<OrderDTO> getAllOrdersByState(@PathVariable(name = "state") State state) {
         return orderService.getAllOrdersByState(state);
     }
+
+    @PostMapping("{orderId}")
+    public void finishOrder(@PathVariable(name = "orderId") Integer orderId) {
+        orderService.confirmOrder(orderId);
+    }
 }
