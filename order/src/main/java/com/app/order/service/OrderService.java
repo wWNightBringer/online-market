@@ -6,7 +6,6 @@ import com.app.common.dto.StorageDTO;
 import com.app.common.enumeration.City;
 import com.app.common.enumeration.Exception;
 import com.app.common.enumeration.State;
-import com.app.common.exception.InvalidStateException;
 import com.app.order.client.StorageClient;
 import com.app.order.client.UserClient;
 import com.app.order.domain.Order;
@@ -18,17 +17,25 @@ import com.app.order.repository.ProductRepository;
 import com.app.order.util.OrderUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.app.common.enumeration.State.OPEN;
 import static com.app.common.enumeration.State.PENDING;
 import static com.app.order.util.SecurityUtil.getUserEmail;
 import static com.app.order.util.mapper.OrderMapper.buildOrder;
@@ -74,14 +81,16 @@ public class OrderService {
         return getOrderDTO(order);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void confirmOrder(Integer orderId) {
         Order order = getOrderById(orderId);
-        State state = PENDING;
-        if (!order.getState().equals(state)) {
-            orderRepository.changeOrderState(state, order.getId());
+
+        if (OPEN.equals(order.getState())) {
+            order.setState(PENDING);
+            orderRepository.save(order);
+        } else {
+            throw new IllegalArgumentException("Order is not open");
         }
-        throw new InvalidStateException("your order is already on a pending");
     }
 
     public List<OrderDTO> getAllOrdersByState(State state) {
@@ -128,5 +137,18 @@ public class OrderService {
             .map(CreateOrderDTO.ProductIdsDTO::productId)
             .toList();
         return productRepository.findAllById(ids);
+    }
+
+    public void launchJob() {
+        JobParameters jobParameters = new JobParametersBuilder()
+            .addDate("currentDate", new Date())
+            .toJobParameters();
+
+        try {
+            jobLauncher.run(job, jobParameters);
+        } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException |
+                 JobParametersInvalidException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

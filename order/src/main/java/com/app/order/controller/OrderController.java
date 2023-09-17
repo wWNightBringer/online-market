@@ -42,7 +42,8 @@ public class OrderController {
     }
 
     @PostMapping("{orderId}")
-    public void finishOrder(@PathVariable(name = "orderId") Integer orderId) {
+    public void confirmOrder(@PathVariable(name = "orderId") Integer orderId) {
         orderService.confirmOrder(orderId);
+        orderService.launchJob();
     }
 }
