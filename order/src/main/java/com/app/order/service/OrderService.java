@@ -6,7 +6,6 @@ import com.app.common.dto.StorageDTO;
 import com.app.common.enumeration.City;
 import com.app.common.enumeration.Exception;
 import com.app.common.enumeration.State;
-import com.app.order.client.StorageClient;
 import com.app.order.client.UserClient;
 import com.app.order.domain.Order;
 import com.app.order.domain.Product;
@@ -16,15 +15,7 @@ import com.app.order.repository.ProductOrderRepository;
 import com.app.order.repository.ProductRepository;
 import com.app.order.util.OrderUtil;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.JobParametersInvalidException;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,30 +34,14 @@ import static com.app.order.util.mapper.OrderMapper.getOrderDTO;
 import static com.app.order.util.mapper.OrderMapper.mapList;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final ProductOrderRepository productOrderRepository;
     private final UserClient userClient;
-    private final StorageClient storageClient;
-    private final JobLauncher jobLauncher;
-    private final Job job;
-
-    public OrderService(OrderRepository orderRepository,
-                        ProductRepository productRepository,
-                        ProductOrderRepository productOrderRepository,
-                        UserClient userClient,
-                        StorageClient storageClient, JobLauncher jobLauncher,
-                        @Qualifier("orderJob") Job job) {
-        this.orderRepository = orderRepository;
-        this.productRepository = productRepository;
-        this.productOrderRepository = productOrderRepository;
-        this.userClient = userClient;
-        this.storageClient = storageClient;
-        this.jobLauncher = jobLauncher;
-        this.job = job;
-    }
+    private final JobService jobService;
 
     @Transactional
     public OrderDTO createOrder(List<CreateOrderDTO.ProductIdsDTO> productIds, String token) {
@@ -91,6 +66,7 @@ public class OrderService {
         } else {
             throw new IllegalArgumentException("Order is not open");
         }
+        jobService.launchJob();
     }
 
     public List<OrderDTO> getAllOrdersByState(State state) {
@@ -137,18 +113,5 @@ public class OrderService {
             .map(CreateOrderDTO.ProductIdsDTO::productId)
             .toList();
         return productRepository.findAllById(ids);
-    }
-
-    public void launchJob() {
-        JobParameters jobParameters = new JobParametersBuilder()
-            .addDate("currentDate", new Date())
-            .toJobParameters();
-
-        try {
-            jobLauncher.run(job, jobParameters);
-        } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException |
-                 JobParametersInvalidException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
