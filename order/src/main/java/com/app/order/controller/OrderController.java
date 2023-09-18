@@ -4,6 +4,7 @@ import com.app.common.config.security.JwtTokenUtils;
 import com.app.common.dto.CreateOrderDTO;
 import com.app.common.dto.OrderDTO;
 import com.app.common.enumeration.State;
+import com.app.order.service.JobService;
 import com.app.order.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final JobService jobService;
 
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody CreateOrderDTO createOrderDTO, HttpServletRequest request) {
@@ -41,9 +43,14 @@ public class OrderController {
         return orderService.getAllOrdersByState(state);
     }
 
-    @PostMapping("{orderId}")
+    @PostMapping("/confirmation/{orderId}")
     public void confirmOrder(@PathVariable(name = "orderId") Integer orderId) {
         orderService.confirmOrder(orderId);
-        orderService.launchJob();
+        jobService.launchJob();
+    }
+
+    @PostMapping("/cancellation/{orderId}")
+    public void cancelOrder(@PathVariable(name = "orderId") Integer orderId) {
+        orderService.cancelOrder(orderId);
     }
 }

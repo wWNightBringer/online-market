@@ -6,6 +6,8 @@ import com.app.common.dto.StorageDTO;
 import com.app.common.enumeration.City;
 import com.app.common.enumeration.Exception;
 import com.app.common.enumeration.State;
+import com.app.common.exception.InvalidStateException;
+import com.app.order.client.StorageClient;
 import com.app.order.client.UserClient;
 import com.app.order.domain.Order;
 import com.app.order.domain.Product;
@@ -21,11 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.app.common.enumeration.State.CANCELLED;
 import static com.app.common.enumeration.State.OPEN;
 import static com.app.common.enumeration.State.PENDING;
 import static com.app.order.util.SecurityUtil.getUserEmail;
@@ -41,7 +43,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ProductOrderRepository productOrderRepository;
     private final UserClient userClient;
-    private final JobService jobService;
+    private final StorageClient storageClient;
 
     @Transactional
     public OrderDTO createOrder(List<CreateOrderDTO.ProductIdsDTO> productIds, String token) {
@@ -64,9 +66,8 @@ public class OrderService {
             order.setState(PENDING);
             orderRepository.save(order);
         } else {
-            throw new IllegalArgumentException("Order is not open");
+            throw new InvalidStateException("The order is not open");
         }
-        jobService.launchJob();
     }
 
     public List<OrderDTO> getAllOrdersByState(State state) {
@@ -95,6 +96,24 @@ public class OrderService {
             .toList();
 
         return OrderUtil.calculateDeliveryDateByAddress(storageCities, deliveryCity.getValue(), order.getDeliveryDate());
+    }
+
+    @Transactional
+    public void cancelOrder(Integer orderId) {
+        Order order = getOrderById(orderId);
+
+        List<ProductOrder> productOrders = order.getProductOrders();
+
+        if (PENDING.equals(order.getState())) {
+            order.setState(CANCELLED);
+            for (ProductOrder productOrder : productOrders) {
+                Product product = productOrder.getProductOrderKey().getProduct();
+                product.setCount(product.getCount() + productOrder.getProductCount());
+            }
+            orderRepository.save(order);
+        } else {
+            throw new InvalidStateException("The order is not pending");
+        }
     }
 
     private void updateProductOrders(List<ProductOrder> productOrders, List<CreateOrderDTO.ProductIdsDTO> productIds) {
