@@ -70,11 +70,7 @@ class OrderServiceTest {
     void confirmOrderWithValidState() {
         Integer orderId = 1;
 
-        Order order = Order.builder()
-            .id(orderId)
-            .state(State.OPEN)
-            .build();
-        orderRepository.save(order);
+        Order order = buildOrder();
 
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
         orderService.confirmOrder(orderId);
@@ -87,6 +83,7 @@ class OrderServiceTest {
         order.setId(1);
         order.setDeliveryDate(LocalDateTime.now());
         order.setProducts(buildProducts());
+        order.setState(State.OPEN);
         return order;
     }
 
