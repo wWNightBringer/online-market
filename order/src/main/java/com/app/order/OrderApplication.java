@@ -5,7 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.kafka.annotation.EnableKafka;
 
 @EnableConfigurationProperties(SecurityConfigProperties.class)
 @SpringBootApplication(
@@ -14,7 +13,6 @@ import org.springframework.kafka.annotation.EnableKafka;
         "com.app.order",
         "com.app.common.handler",
         "com.app.common.micrometr"})
-@EnableKafka
 public class OrderApplication {
 
     public static void main(String[] args) {

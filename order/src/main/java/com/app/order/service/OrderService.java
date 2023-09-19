@@ -101,19 +101,16 @@ public class OrderService {
     @Transactional
     public void cancelOrder(Integer orderId) {
         Order order = getOrderById(orderId);
+        order.setState(CANCELLED);
 
         List<ProductOrder> productOrders = order.getProductOrders();
 
-        if (PENDING.equals(order.getState())) {
-            order.setState(CANCELLED);
-            for (ProductOrder productOrder : productOrders) {
-                Product product = productOrder.getProductOrderKey().getProduct();
-                product.setCount(product.getCount() + productOrder.getProductCount());
-            }
-            orderRepository.save(order);
-        } else {
-            throw new InvalidStateException("The order is not pending");
-        }
+        productOrders.forEach(p -> {
+            Product product = p.getProductOrderKey().getProduct();
+            product.setCount(product.getCount() + p.getProductCount());
+        });
+
+        orderRepository.save(order);
     }
 
     private void updateProductOrders(List<ProductOrder> productOrders, List<CreateOrderDTO.ProductIdsDTO> productIds) {
