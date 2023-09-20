@@ -6,6 +6,7 @@ import com.app.common.dto.OrderDTO;
 import com.app.common.enumeration.State;
 import com.app.order.service.JobService;
 import com.app.order.service.OrderService;
+import io.micrometer.core.annotation.Timed;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,7 @@ public class OrderController {
     private final OrderService orderService;
     private final JobService jobService;
 
+    @Timed("create.order")
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody CreateOrderDTO createOrderDTO, HttpServletRequest request) {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -38,11 +40,13 @@ public class OrderController {
         return ResponseEntity.notFound().build();
     }
 
+    @Timed("read.order.byState")
     @GetMapping("{state}")
     public List<OrderDTO> getAllOrdersByState(@PathVariable(name = "state") State state) {
         return orderService.getAllOrdersByState(state);
     }
 
+    @Timed("confirm.order.byId")
     @PostMapping("/confirmation/{orderId}")
     public void confirmOrder(@PathVariable(name = "orderId") Integer orderId) {
         orderService.confirmOrder(orderId);
