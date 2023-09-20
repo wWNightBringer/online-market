@@ -11,7 +11,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.app.common.enumeration.SystemEnum.*;
+import static com.app.common.enumeration.SystemEnum.EMAIL_PARAM;
+import static com.app.common.enumeration.SystemEnum.NAME_PARAM;
+import static com.app.common.enumeration.SystemEnum.ROLE_PARAM;
+
 
 public class JwtTokenUtils {
 

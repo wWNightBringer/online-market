@@ -24,7 +24,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleException(INTERNAL_SERVER_ERROR, runtimeException);
     }
 
-    private ResponseEntity<Error> handleException(HttpStatus status, RuntimeException runtimeException){
+    private ResponseEntity<Error> handleException(HttpStatus status, RuntimeException runtimeException) {
         return ResponseEntity.status(status).body(showErrorMessage(status, runtimeException));
     }
 
