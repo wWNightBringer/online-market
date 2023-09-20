@@ -2,9 +2,12 @@ package com.app.order.service;
 
 import com.app.common.dto.CreateOrderDTO;
 import com.app.common.dto.OrderDTO;
+import com.app.common.dto.StorageDTO;
 import com.app.common.enumeration.City;
 import com.app.common.enumeration.Exception;
 import com.app.common.enumeration.State;
+import com.app.common.exception.InvalidStateException;
+import com.app.order.client.StorageClient;
 import com.app.order.client.UserClient;
 import com.app.order.domain.Order;
 import com.app.order.domain.Product;
@@ -19,10 +22,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.app.common.enumeration.State.CANCELLED;
+import static com.app.common.enumeration.State.OPEN;
+import static com.app.common.enumeration.State.PENDING;
 import static com.app.order.util.SecurityUtil.getUserEmail;
 import static com.app.order.util.mapper.OrderMapper.buildOrder;
 import static com.app.order.util.mapper.OrderMapper.getOrderDTO;
@@ -36,7 +43,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ProductOrderRepository productOrderRepository;
     private final UserClient userClient;
-    private final JobService jobService;
+    private final StorageClient storageClient;
 
     @Transactional
     public OrderDTO createOrder(List<CreateOrderDTO.ProductIdsDTO> productIds, String token) {
@@ -49,6 +56,18 @@ public class OrderService {
         updateProductOrders(productOrders, productIds);
 
         return getOrderDTO(order);
+    }
+
+    @Transactional
+    public void confirmOrder(Integer orderId) {
+        Order order = getOrderById(orderId);
+
+        if (OPEN.equals(order.getState())) {
+            order.setState(PENDING);
+            orderRepository.save(order);
+        } else {
+            throw new InvalidStateException("The order is not open");
+        }
     }
 
     public List<OrderDTO> getAllOrdersByState(State state) {
@@ -66,15 +85,32 @@ public class OrderService {
     public LocalDateTime getDeliveryDate(Integer orderId, City deliveryCity) {
         Order order = getOrderById(orderId);
 
-        List<String> mockCity = List.of(
-            City.DNIPRO.getValue(),
-            City.LVIV.getValue());
+        List<Integer> productIds = order.getProducts().stream()
+            .map(Product::getId)
+            .toList();
 
-        return OrderUtil.calculateDeliveryDateByAddress(mockCity, deliveryCity.getValue(), order.getDeliveryDate());
+        StorageDTO[] storages = storageClient.getStoragesByProductIds(productIds);
+
+        List<String> storageCities = Arrays.stream(storages)
+            .map(StorageDTO::city)
+            .toList();
+
+        return OrderUtil.calculateDeliveryDateByAddress(storageCities, deliveryCity.getValue(), order.getDeliveryDate());
     }
 
-    public void confirmOrder(Integer id) {
-        jobService.launchJob();
+    @Transactional
+    public void cancelOrder(Integer orderId) {
+        Order order = getOrderById(orderId);
+        order.setState(CANCELLED);
+
+        List<ProductOrder> productOrders = order.getProductOrders();
+
+        productOrders.forEach(p -> {
+            Product product = p.getProductOrderKey().getProduct();
+            product.setCount(product.getCount() + p.getProductCount());
+        });
+
+        orderRepository.save(order);
     }
 
     private void updateProductOrders(List<ProductOrder> productOrders, List<CreateOrderDTO.ProductIdsDTO> productIds) {

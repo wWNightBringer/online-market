@@ -12,8 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
     scanBasePackages = {
         "com.app.order",
         "com.app.common.handler",
-        "com.app.common.config.micrometr",
-        "com.app.common.config.kafka.producer"})
+        "com.app.common.config.micrometr"})
 public class OrderApplication {
 
     public static void main(String[] args) {
