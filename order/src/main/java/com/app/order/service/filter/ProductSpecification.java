@@ -33,6 +33,7 @@ public class ProductSpecification {
         return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.conjunction();
     }
 
+
     public static Specification<Product> hasPriceBetween(BigDecimal priceFrom, BigDecimal priceTo) {
         return (root, criteriaQuery, criteriaBuilder) -> {
             BigDecimal minPrice = priceFrom != null ? priceFrom : BigDecimal.ZERO;
