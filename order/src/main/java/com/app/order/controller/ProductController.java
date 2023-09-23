@@ -52,18 +52,13 @@ public class ProductController {
 
     @Timed(value = "get.products.time", description = "Get all products time after executions")
     @GetMapping
-    public ResponsePage<ProductDTO> getAllProducts(Pageable pageable) {
-        List<ProductDTO> allProducts = productService.getAllProducts(pageable);
-        return new ResponsePage<>(allProducts, allProducts.size());
-    }
-
-    @GetMapping("/product")
     public ResponsePage<ProductDTO> getAllProducts(@RequestParam(name = "title", required = false) String title,
                                                    @RequestParam(name = "group", required = false) Group group,
                                                    @RequestParam(name = "brand", required = false) Brand brand,
                                                    @RequestParam(name = "priceFrom", required = false) BigDecimal priceFrom,
-                                                   @RequestParam(name = "priceTo", required = false) BigDecimal priceTo) {
-        List<ProductDTO> allProducts = productService.getAllProductsByGroupAndBrand(title, group, brand, priceFrom, priceTo);
+                                                   @RequestParam(name = "priceTo", required = false) BigDecimal priceTo,
+                                                   Pageable pageable) {
+        List<ProductDTO> allProducts = productService.getAllProducts(title, group, brand, priceFrom, priceTo, pageable);
         return new ResponsePage<>(allProducts, allProducts.size());
     }
 }
