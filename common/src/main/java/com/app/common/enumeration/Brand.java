@@ -4,6 +4,7 @@ import com.app.common.exception.EnumNotFoundException;
 
 public enum Brand {
     SAMSUNG("Samsung"),
+    LENOVO("Lenovo"),
     LG("LG"),
     ADIDAS("Adidas"),
     NIKE("Nike"),

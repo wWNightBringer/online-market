@@ -1,5 +1,6 @@
 package com.app.order.util.mapper;
 
+import com.app.common.dto.CreateProductDTO;
 import com.app.common.dto.ProductDTO;
 import com.app.order.domain.Product;
 import org.springframework.data.domain.Page;
@@ -40,5 +41,25 @@ public class ProductMapper {
             .brand(productDTO.brand())
             .price(productDTO.price())
             .build();
+    }
+
+    public static Product mapCreateProduct(CreateProductDTO productDTO) {
+        return Product.builder()
+            .uuid(UUID.randomUUID().toString())
+            .title(productDTO.title())
+            .group(productDTO.group())
+            .brand(productDTO.brand())
+            .price(productDTO.price())
+            .count(productDTO.count())
+            .build();
+    }
+
+    public static CreateProductDTO mapCreateProduct(Product product) {
+        return new CreateProductDTO(
+            product.getTitle(),
+            product.getGroup(),
+            product.getBrand(),
+            product.getPrice(),
+            product.getCount());
     }
 }
