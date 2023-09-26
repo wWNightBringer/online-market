@@ -1,7 +1,10 @@
 package com.app.order.service;
 
+import com.app.common.dto.CreateProductDTO;
 import com.app.common.dto.ProductDTO;
+import com.app.common.enumeration.Brand;
 import com.app.common.enumeration.Exception;
+import com.app.common.enumeration.Group;
 import com.app.order.domain.Product;
 import com.app.order.repository.ProductRepository;
 import com.app.order.util.mapper.ProductMapper;
@@ -9,11 +12,18 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import static com.app.order.service.filter.ProductSpecification.hasBrand;
+import static com.app.order.service.filter.ProductSpecification.hasGroup;
+import static com.app.order.service.filter.ProductSpecification.hasPriceBetween;
+import static com.app.order.service.filter.ProductSpecification.hasTitle;
+import static com.app.order.util.mapper.ProductMapper.mapCreateProduct;
 import static com.app.order.util.mapper.ProductMapper.mapProduct;
 import static com.app.order.util.mapper.ProductMapper.pageMap;
 
@@ -24,9 +34,9 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public ProductDTO addProduct(ProductDTO productDTO) {
-        Product product = productRepository.save(ProductMapper.mapProduct(productDTO));
-        return mapProduct(product);
+    public CreateProductDTO addProduct(CreateProductDTO productDTO) {
+        Product product = productRepository.save(ProductMapper.mapCreateProduct(productDTO));
+        return mapCreateProduct(product);
     }
 
     @Transactional(readOnly = true)
@@ -47,8 +57,18 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDTO> getAllProducts(Pageable pageable) {
-        Page<Product> productPage = productRepository.findAll(pageable);
-        return pageMap(productPage);
+    public List<ProductDTO> getAllProducts(String title,
+                                           Group group,
+                                           Brand brand,
+                                           BigDecimal priceFrom,
+                                           BigDecimal priceTo,
+                                           Pageable pageable) {
+        Specification<Product> specification = Specification
+            .where(hasTitle(title))
+            .and(hasGroup(group))
+            .and(hasBrand(brand))
+            .and(hasPriceBetween(priceFrom, priceTo));
+        Page<Product> products = productRepository.findAll(specification, pageable);
+        return pageMap(products);
     }
 }

@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+  cloud:
+    consul:
+      discovery:
+        enabled: false
+      enabled: false
+
