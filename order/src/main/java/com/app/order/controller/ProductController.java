@@ -5,7 +5,6 @@ import com.app.common.dto.ProductDTO;
 import com.app.common.dto.ResponsePage;
 import com.app.common.enumeration.Brand;
 import com.app.common.enumeration.Group;
-import com.app.order.domain.Product;
 import com.app.order.service.ProductService;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -43,11 +42,6 @@ public class ProductController {
     @GetMapping("{title}")
     public ProductDTO getProductByTitle(@PathVariable(name = "title") String title) {
         return productService.getProductByTitle(title);
-    }
-
-    @GetMapping("{id}")
-    public Product getProduct(@PathVariable(name = "id") Integer id){
-        return productService.getProductById(id);
     }
 
     @DeleteMapping("{title}")
